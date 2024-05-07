@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Install the OpenStack Operator :: RHOSP18 - Provision Control Plane Services and Manage Data Plane Nodes</title>
+    <link rel="prev" href="section2.html">
+    <link rel="next" href="section4.html">
+    <meta name="generator" content="Antora 3.1.3">
+    <link rel="stylesheet" href="../../../_/css/site.css">
+    <script>var uiRootPath = '../../../_'</script>
+  </head>
+  <body class="article">
+<header class="header">
+  <nav class="navbar">
+    <div class="navbar-brand">
+      <a class="navbar-item" href="https://www.redhat.com" target="_blank"><img src="../../../_/img/redhat-logo.png" height="40px" alt="Red Hat"></a>
+      <a class="navbar-item" style="font-size: 24px; color: white" href="../../..">RHOSP18 - Provision Control Plane Services and Manage Data Plane Nodes</a>
+      <button class="navbar-burger" data-target="topbar-nav">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+    <div id="topbar-nav" class="navbar-menu">
+      <div class="navbar-end">
+        <a class="navbar-item" href="https://github.com/RedHatQuickCourses/changeme/issues" target="_blank">Report Issues</a>
+      </div>
+    </div>
+  </nav>
+</header><div class="body">
+<div class="nav-container" data-component="rhods-deploy" data-version="1.34">
+  <aside class="nav">
+    <div class="panels">
+<div class="nav-panel-menu is-active" data-panel="menu">
+  <nav class="nav-menu">
+    <h3 class="title"><a href="../index.html">RHOSP18 - Provision Control Plane Services and Manage Data Plane Nodes</a></h3>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="0">
+<ul class="nav-list">
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="../index.html">Home</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="0">
+<ul class="nav-list">
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="section0.html">Traditional TripleO deployment verses deployment with OpenShift cluster.</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="section1.html">RHOSO installation process overview</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="section2.html">Perform Prerequisite Operations</a>
+  </li>
+  <li class="nav-item is-current-page" data-depth="1">
+    <a class="nav-link" href="section3.html">Install the OpenStack Operator</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="section4.html">Preparing RHOCP for RHOSP Network Isolation</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="section5.html">Create the OpenStack Control Plane</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="section6.html">Verify OpenStack Controlplane configuration</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="section7.html">Create the Data Plane</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="section8.html">Verify Dataplane deployment</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="section9.html">Access OpenStack</a>
+  </li>
+</ul>
+  </li>
+</ul>
+  </nav>
+</div>
+<div class="nav-panel-explore" data-panel="explore">
+  <div class="context">
+    <span class="title">RHOSP18 - Provision Control Plane Services and Manage Data Plane Nodes</span>
+    <span class="version">1.34</span>
+  </div>
+  <ul class="components">
+    <li class="component is-current">
+      <a class="title" href="../index.html">RHOSP18 - Provision Control Plane Services and Manage Data Plane Nodes</a>
+      <ul class="versions">
+        <li class="version is-current is-latest">
+          <a href="../index.html">1.34</a>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</div>
+    </div>
+  </aside>
+</div>
+<main class="article">
+<div class="toolbar" role="navigation">
+<button class="nav-toggle"></button>
+  <a href="../index.html" class="home-link"></a>
+<nav class="breadcrumbs" aria-label="breadcrumbs">
+  <ul>
+    <li><a href="../index.html">RHOSP18 - Provision Control Plane Services and Manage Data Plane Nodes</a></li>
+    <li><a href="section3.html">Install the OpenStack Operator</a></li>
+  </ul>
+</nav>
+</div>
+  <div class="content">
+<aside class="toc sidebar" data-title="Contents" data-levels="2">
+  <div class="toc-menu"></div>
+</aside>
+<article class="doc">
+<h1 class="page">Install the OpenStack Operator</h1>
+<div class="paragraph">
+<p>The OpenStack Operator functions as the main operator for Red Hat OpenStack 18 deployment.
+It acts as a "meta" operator, overseeing and configuring other operators for OpenStack by monitoring and managing their CustomResources (CRs).
+Moreover, installing this operator will automatically set up all necessary operator dependencies for installing and managing OpenStack.</p>
+</div>
+<div class="paragraph">
+<p>Follow below steps for installation of Openstack Operator on RHOCP cluster.</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Clone the Files Repo (FIXME: avoid using custom repo and use the generic steps)</p>
+<div class="paragraph">
+<p>In the bastion terminal, clone the repo and change directory to the files that we will used later in the lab</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">git clone https://github.com/pnavarro/showroom_osp-on-ocp-lb1374.git labrepo
+cd labrepo/content/files</code></pre>
+</div>
+</div>
+</li>
+<li>
+<p>Create required projects for the Openstack Operator installation.</p>
+<div class="paragraph">
+<p>The next installation step for the <strong>OpenStack Operators</strong> involves creating the <strong>openstack-operators</strong> and <strong>openstack</strong> projects for the RHOSO operators.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">oc new-project openstack-operators
+oc new-project openstack</code></pre>
+</div>
+</div>
+</li>
+<li>
+<p>Prepare the secret for installating the operators:</p>
+<div class="paragraph">
+<p>Login with your Red Hat account and create a secret:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">podman login --username "My-RH-username" --password "My-Password" registry.redhat.io --authfile auth.json</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>FIXME: use local repo</p>
+</div>
+</li>
+<li>
+<p>Ensure that you observe the <code>Login Succeeded!</code> message in the output of the preceding command, then confirm the creation of the <code>auth.json</code> file.</p>
+</li>
+</ol>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>cat auth.json</pre>
+</div>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Create secret for the registry:</p>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">oc create secret generic osp-operators-secret \
+ -n openstack-operators \
+ --from-file=.dockerconfigjson=auth.json \
+ --type=kubernetes.io/dockerconfigjson</code></pre>
+</div>
+</div>
+</li>
+<li>
+<p>Veify the secret is created:</p>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">oc get secrets -n openstack-operators osp-operators-secret</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">Sample Output</div>
+<div class="content">
+<pre>NAME                   TYPE                             DATA   AGE
+osp-operators-secret   kubernetes.io/dockerconfigjson   1      10s</pre>
+</div>
+</div>
+</li>
+<li>
+<p>Configure the <strong>Catalog Source, OperatorGroup and Subscription</strong> for the <strong>OpenStack Operator</strong> using your registry:</p>
+<div class="paragraph">
+<p>Create the new <strong>CatalogSource, OperatorGroup, and Subscription</strong> CRs in the <strong>openstack</strong> namespace from <strong>files/openstack-operators.yaml</strong>: You can cut and paste the referenced yamlfiles from the repo or you may wish to clone the repository onto the bastion which this guide will assume:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">oc apply -f osp-ng-openstack-operator.yaml</code></pre>
+</div>
+</div>
+</li>
+<li>
+<p>Confirm that you have installed the Openstack Operator, <strong>openstack-operator.openstack-operators</strong>:</p>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">oc get operators openstack-operator.openstack-operators</code></pre>
+</div>
+</div>
+</li>
+<li>
+<p>Review the pods in the <strong>openstack-operators</strong> namespace:</p>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">oc get pods -n openstack-operators</code></pre>
+</div>
+</div>
+</li>
+<li>
+<p>If you run:</p>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">oc get pods -n openstack-operators --sort-by=.metadata.creationTimestamp</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>You should see a list of completed pods and then the running openstack services pods.
+It should look like:</p>
+</div>
+<div class="listingblock">
+<div class="title">Sample Output</div>
+<div class="content">
+<pre>NAME                                                              READY   STATUS      RESTARTS   AGE
+(...)
+openstack-operator-index-89nv9                                    1/1     Running     0          7m30s
+
+neutron-operator-controller-manager-5755996c4b-ctbf8              2/2     Running     0          7m19s
+openstack-ansibleee-operator-controller-manager-6d7d77fc45pdtfj   2/2     Running     0          7m13s
+openstack-operator-controller-manager-56fb74ccb7-r8lvn            2/2     Running     0          7m1s
+dataplane-operator-controller-manager-6844bfd645-f2zvs            2/2     Running     0          7m1s
+glance-operator-controller-manager-596b56cd5-rvfrm                2/2     Running     0          6m59s
+swift-operator-controller-manager-df5fbbbc5-zscc5                 2/2     Running     0          6m49s
+octavia-operator-controller-manager-6549bc8f-r6xbp                2/2     Running     0          6m42s
+openstack-baremetal-operator-controller-manager-7cd655c4c7f5glm   2/2     Running     0          6m42s
+barbican-operator-controller-manager-69b766c996-ldg4n             2/2     Running     0          6m28s
+(...)</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Wait to see all the <code>Running</code> pods in <code>READY</code> state.</p>
+</div>
+</li>
+<li>
+<p>Configure Secure Access for OpenStack Services</p>
+<div class="paragraph">
+<p>NOTE:
+We will be utilizing a preconfigured yaml file (<code>files/osp-ng-ctlplane-secret.yaml</code>) to create a base64 password for the heat the other services.</p>
+</div>
+<div class="paragraph">
+<p>FIXME: avoid using preconfigured files</p>
+</div>
+</li>
+<li>
+<p>Create the Secret:</p>
+<div class="listingblock execute">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">oc create -f osp-ng-ctlplane-secret.yaml</code></pre>
+</div>
+</div>
+</li>
+<li>
+<p>Verify the <strong>Secret</strong> was created:</p>
+<div class="listingblock execute">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">oc describe secret osp-secret -n openstack</code></pre>
+</div>
+</div>
+</li>
+</ol>
+</div>
+<nav class="pagination">
+  <span class="prev"><a href="section2.html">Perform Prerequisite Operations</a></span>
+  <span class="next"><a href="section4.html">Preparing RHOCP for RHOSP Network Isolation</a></span>
+</nav>
+</article>
+  </div>
+</main>
+</div>
+<footer class="footer">
+  <img src="../../../_/img/rhl-logo-red.png" height="40px" alt="Red Hat"  href="https://redhat.com" >
+</footer><script id="site-script" src="../../../_/js/site.js" data-ui-root-path="../../../_"></script>
+<script async src="../../../_/js/vendor/highlight.js"></script>
+  </body>
+</html>
