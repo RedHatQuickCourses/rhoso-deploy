@@ -1,6 +1,37 @@
-= An Example Quick Course
+= RHOSP18 - Provision Control Plane Services and Manage Data Plane Nodes
 :navtitle: Home
 
-== Introduction
+Welcome to this quick course on the _Provision Control Plane Services and Manage Data Plane Nodes in RHOSP18_.
 
-This is an example quick course demonstrating the usage of Antora for authoring and publishing quick courses.
+== Authors
+
+The PTL team acknowledges the valuable contributions of the following Red Hat associates:
+
+* Pedro Navarro Perez
+* Fernando Lozano
+* Ashish Shah
+
+== Classroom Environment for Red Hat Associates
+
+Continue using the https://demo.redhat.com/catalog?item=babylon-catalog-prod/community-content.com-nextgen-osp.prod&utm_source=webapp&utm_medium=share-link[Red Hat OpenStack Services on OpenShift Dev Preview Demo] lab for hands-on activity for this course.
+
+FIXME: Make sure the demo lab stays for long time. Create it's copy under PERT or use ROLE lab if required.
+
+== Classroom Environment for Red Hat Partners
+
+* FIXME: TBD
+
+== Prerequisites
+
+* FIXME: TBD
+
+== Objectives
+
+* Traditional TripleO deployment verses deployment with OpenShift cluster.
+* RHOSO deployment process overview.
+* Pre-requisites for RHOSO deployment.
+* Deploy Controlplane services on the RHOCP cluster.
+* Verify functionality of Controlplane services.
+* Deploy Dataplane node using RHOCP cluster.
+* Verify functionality of Dataplane deployment.
+* Verify RHOSP cluster function by deploying workload on it.

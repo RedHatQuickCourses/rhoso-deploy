@@ -1,0 +1,68 @@
+= Verify Dataplane deployment
+
+. Track the deployment process by observing logs.
+
+. You can view the Ansible logs while the deployment executes:
++
+[source,bash,role=execute]
+----
+oc logs -l app=openstackansibleee -f --max-log-requests 10
+----
++
+.Sample Output
+----
+(...)
+PLAY RECAP *********************************************************************
+edpm-compute-0             : ok=53   changed=26   unreachable=0    failed=0    skipped=54   rescued=0    ignored=0
+----
++
+Press Ctrl-C to exit.
+
+. List running jobs
++
+[source,bash,role=execute]
+----
+oc get jobs -n openstack
+----
+
+. Check logs of running jobs (Use the job which is not completed yet)
++
+.Example:
+[source,bash,role=execute]
+----
+oc logs jobs/libvirt-openstack-edpm-ipam -f
+----
+
+. Verify the deployment status using the bleow steps:
+
+. Check the status of Openstack Dataplane Deployment.
++
+[source,bash,role=execute]
+----
+oc get openstackdataplanedeployment
+----
+
+. Repeat the query until you see the following:
++
+.Sample Output
+----
+NAME                  STATUS   MESSAGE
+openstack-edpm-ipam   True     Setup Complete
+----
+
+. Check the status of Openstack Dataplane Nodeset deployment.
++
+[source,bash,role=execute]
+----
+oc get openstackdataplanenodeset
+----
+
+. Repeat the query until you see the following:
++
+.Sample Output
+----
+NAME                  STATUS   MESSAGE
+openstack-edpm-ipam   True     NodeSet Ready
+----
+
+FIXME: Review and add additional steps as required
