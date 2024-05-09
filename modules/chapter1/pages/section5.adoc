@@ -56,6 +56,8 @@ oc create secret generic cinder-nfs-config --from-file=nfs-cinder-conf
 oc create secret generic glance-cinder-config --from-file=glance-conf
 ----
 
+FIXME: Explain about above configuration and add steps to verify the things are configured as expected. 
+
 . Finally create the OpenStack control plane
 +
 [source,bash,role=execute]

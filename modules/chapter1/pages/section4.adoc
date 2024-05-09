@@ -139,6 +139,7 @@ tenant        5s
 ----
 oc apply -f osp-ng-metal-lb-ip-address-pools.yaml
 ----
+FIXME: what is the difference in the range mentioned in NAD whereabbouts v/s metallb ipaddresspools
 
 . Verify the metallb ip address pools using below command:
 +

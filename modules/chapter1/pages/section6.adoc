@@ -193,4 +193,4 @@ Defaulted container "ovsdb-server" out of: ovsdb-server, ovs-vswitchd, ovn-contr
        valid_lft forever preferred_lft forever
 ----
 
-FIXME: additional steps to create image, flavor, etc
+FIXME: additional steps to create image, flavor, etc. Steps under `Access OpenStack` can be added here (all the steps except creation of instance works at this stage)
