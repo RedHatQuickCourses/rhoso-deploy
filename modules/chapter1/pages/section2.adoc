@@ -5,12 +5,11 @@
 Some prerequisites needed to install Red Hat OpenStack Services on OpenShift (RHOSO) are already included in the lab environment such as:
 
 * An operational OpenShift cluster which supports Multus CNI
-* `oc` command line tool on your workstation (bastion host)
-* `podman` command line tool on your workstation (bastion host)
+* `oc` command line tool on your bastion (workstation host)
+* `podman` command line tool on your bastion (workstation host)
 * Access to repositories which contain the Dev Preview code
 * Access to an existing registry or create a local Quay registry
-* Example YAML files are available in this repository which can be cloned or copy and pasted for use. For ease of instructions it will be assumed the repo has been cloned
-* FIXME: review and correct above
+* The YAML files required for deployment are made available in this lab for your convenience.
 
 == About the Prerequisite Operators
 
@@ -28,18 +27,19 @@ We will be utilizing this operator for configuration of OpenStack network isolat
 
 MetalLB is a load balancer solution for Kubernetes clusters. 
 In the current use case of OSP services deployment on OCP cluster, the MetalLB operator manages the deployment via CRDs, like `IPAddressPool` and `L2Advertisement`. 
-This implementation of MetalLB operates in layer2 mode. It requires IP address pools for load balancer services, configurable via IPAddressPool CR. L2Advertisement CR facilitates IP advertisement from specified pools, ensuring efficient IP allocation to services and namespaces.
+This implementation of MetalLB operates in layer2 mode. It requires IP address pools for load balancer services, configurable via IPAddressPool CR. 
+L2Advertisement CR facilitates IP advertisement from specified pools, ensuring efficient IP allocation to services and namespaces.
 
 === Cert-manager Oerator:
 
-FIXME
+FIXME: Explanation of cert-manager operator in context of RHOSP deployment in this lab.
 
 == Install the Prerequisite Operators
 
 Access your cluster on Workstation or Bastion node where you have access to `oc` CLI and perform the following steps.
 
 Make sure you can reach out to the OpenShift cluster, for instance, by listing the nodes in your cluster:
-+
+
 [source,bash,role=execute]
 ----
 oc get nodes
@@ -74,6 +74,13 @@ spec:
   finalizers:
   - kubernetes
 EOF
+----
+
+. Verify the namespace is created:
++
+[source,bash,role=execute]
+----
+oc get ns openshift-nmstate  -o custom-columns=Name:.metadata.name,Status:.status.phase
 ----
 +
 .Sample output

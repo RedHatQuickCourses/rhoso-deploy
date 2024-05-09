@@ -1,183 +1,116 @@
-= Preparing RHOCP for RHOSP Network Isolation
+= Install the OpenStack Operator
 
-Network confiuration for the nodes is facilated by the below operators.
+The OpenStack Operator functions as the main operator for Red Hat OpenStack 18 deployment. 
+It acts as a "meta" operator, overseeing and configuring other operators for OpenStack by monitoring and managing their CustomResources (CRs). 
+Moreover, installing this operator will automatically set up all necessary operator dependencies for installing and managing OpenStack.
 
-NMState operator - facilitates network configuration for the nodes of the cluster.
-Multus CNI plugin - facilitates the network configuration for the pods running controlplane services for the cluster.
-MetalLB operator - offers load blaancing service for OCP baremetal cluster.
+Follow below steps for installation of Openstack Operator on RHOCP cluster.
 
-FIXME: review the explanation, short version above or elaborated as below.
 
-`NodeNetworkConfigurationPolicy` offered by nmstate operator allows you to configure network settings on individual nodes in a network. 
-This policy can be used to set network interfaces, routing tables, firewall rules, and other network-related settings. 
-
-NetworkAttachmentDefinition (NAD) is a feature offered by the Multus CNI (Container Network Interface) plugin. 
-NAD is used to define network attachment points and states for network devices, allowing for automatic fencing and management of those devices. 
-
-`IPAddressPool` and `L2Advertisement` CRs offered by MetalLB operator facilitates IP advertisement from specified pools, ensuring efficient IP allocation to services and namespaces. 
-By leveraging these custom resources, OpenShift facilitates efficient communication between nodes within the cluster, promoting seamless integration and performance optimization in networking-intensive environments.
-
-Please refer to the following table for the network configuration utilized in this deployment:
-
-[cols="1,1,1,1,1,1,1"]
-|===
-|Network name | VLAN | CIDR	| NetConfig allocation | Range	MetalLB IPAddressPool range	| nad ipam range | OCP worker nncp range
-
-| ctlplane
-| n/a
-| 172.22.0.0/24
-| 172.22.0.100 - 172.22.0.120
-| 172.22.0.80-172.22.0.90
-| 172.22.0.30 - 172.22.0.70
-| 172.22.0.10 - 172.22.0.20
-
-| internalapi
-| 20
-| 172.17.0.0/24
-| 172.17.0.100 - 172.17.0.250
-| 172.17.0.80-172.17.0.90
-| 172.17.0.30 - 172.17.0.70
-| 172.17.0.10 - 172.17.0.20
-
-| storage
-| 21
-| 172.18.0.0/24
-| 172.18.0.100 - 172.18.0.250
-| 172.18.0.80-172.18.0.90
-| 172.18.0.30 - 172.18.0.70
-| 172.18.0.10 - 172.18.0.20
-
-| tenant
-| 22
-| 172.19.0.0/24
-| 172.19.0.100 - 172.19.0.250
-| 172.19.0.80-172.19.0.90
-| 172.19.0.30 - 172.19.0.70
-| 172.19.0.10 - 172.19.0.20
-
-| external
-| n/a
-| 192.168.123.0/24
-| 192.168.123.61 - 192.168.123.90
-| 192.168.122.80 - 192.168.122.90
-| 192.168.123.60 - 192.168.123.110
-|  
-
-|===
-
-We will be using a preconfigured set of yaml files in the `files` directory which start with `osp-ng-nncp-`.
-
-FIXME: mention source of these files and a few guidelines to twek these as per the lab infrastructure.
-
-There are 3 files for each of the control plane and worker nodes.
-
-Change to the `files` directory:
-
-[source,bash,role=execute]
-----
-cd ~/labrepo/content/files
-----
-
-. Apply preconfigured yamls indivdually:
+. Prepare the secret for installating the operators:
 +
-[source,bash,role=execute]
-----
-oc apply -f osp-ng-nncp-w1.yaml
-oc apply -f osp-ng-nncp-w2.yaml
-oc apply -f osp-ng-nncp-w3.yaml
-oc apply -f osp-ng-nncp-m1.yaml
-oc apply -f osp-ng-nncp-m2.yaml
-oc apply -f osp-ng-nncp-m3.yaml
-----
-
-. Wait until they are in an available state before proceeding:
+Login with your Red Hat account and create a secret:
 +
-[source,bash,role=execute]
-----
-oc get nncp -w
-----
-+
-.Sample Output
 [source,bash]
 ----
-NAME                              STATUS      REASON
-osp-enp1s0-master1-ocp4-master1   Available   SuccessfullyConfigured
-osp-enp1s0-master2-ocp4-master2   Available   SuccessfullyConfigured
-osp-enp1s0-master3-ocp4-master3   Available   SuccessfullyConfigured
-osp-enp1s0-worker-ocp4-worker1    Available   SuccessfullyConfigured
-osp-enp1s0-worker-ocp4-worker2    Available   SuccessfullyConfigured
-osp-enp1s0-worker-ocp4-worker3    Available   SuccessfullyConfigured
+podman login --username "My-RH-username" --password "My-Password" registry.redhat.io --authfile auth.json
+----
++
+NOTE: You need to replace *My-RH-username* and *My-Password* strings in the above command with the apporpriate value.
+
+. Ensure that you observe the `Login Succeeded!` message in the output of the preceding command, then confirm the creation of the `auth.json` file.
+[source,bash]
+----
+cat auth.json
+----
+. Create secret for the registry:
++
+[source,bash]
+----
+oc create secret generic osp-operators-secret \
+ -n openstack-operators \
+ --from-file=.dockerconfigjson=auth.json \
+ --type=kubernetes.io/dockerconfigjson
 ----
 
-. Before proceeding configure a *nad* resource for each isolated network to attach a service pod to the network:
+. Veify the secret is created:
 +
-[source,bash,role=execute]
+[source,bash]
 ----
-oc apply -f osp-ng-netattach.yaml
-----
-
-. Verify the `network-attachment-definations` created with the above command:
-+
-[source,bash,role=execute]
-----
-oc get network-attachment-definitions.k8s.cni.cncf.io -n openstack
+oc get secrets -n openstack-operators osp-operators-secret
 ----
 +
 .Sample Output
 ----
-NAME          AGE
-ctlplane      5s
-external      5s
-internalapi   5s
-storage       5s
-tenant        5s
+NAME                   TYPE                             DATA   AGE
+osp-operators-secret   kubernetes.io/dockerconfigjson   1      10s
 ----
 
-. Once the nodes are available and attached << FIXME elaborate configure the *MetalLB IP address range* using a preconfigured yaml file:
+. Configure the **Catalog Source, OperatorGroup and Subscription** for the **OpenStack Operator**
 +
-[source,bash,role=execute]
+[source,bash]
 ----
-oc apply -f osp-ng-metal-lb-ip-address-pools.yaml
+oc apply -f osp-ng-openstack-operator.yaml
 ----
-FIXME: what is the difference in the range mentioned in NAD whereabbouts v/s metallb ipaddresspools
 
-. Verify the metallb ip address pools using below command:
+. Confirm that you have installed the Openstack Operator, *openstack-operator.openstack-operators*:
 +
-[source,bash,role=execute]
+[source,bash]
 ----
-oc get ipaddresspools.metallb.io -n metallb-system 
+oc get operators openstack-operator.openstack-operators
 ----
+
+. Review the pods in the **openstack-operators** namespace:
++
+[source,bash]
+----
+oc get pods -n openstack-operators
+----
+
+. If you run:
++
+[source, bash]
+----
+oc get pods -n openstack-operators --sort-by=.metadata.creationTimestamp
+----
++
+You should see a list of completed pods and then the running openstack services pods.
+It should look like:
 +
 .Sample Output
 ----
-NAME          AUTO ASSIGN   AVOID BUGGY IPS   ADDRESSES
-ctlplane      true          false             ["172.22.0.80-172.22.0.90"]
-internalapi   true          false             ["172.17.0.80-172.17.0.90"]
-storage       true          false             ["172.18.0.80-172.18.0.90"]
-tenant        true          false             ["172.19.0.80-172.19.0.90"]
-----
+NAME                                                              READY   STATUS      RESTARTS   AGE
+(...)
+openstack-operator-index-89nv9                                    1/1     Running     0          7m30s
 
-. Lastly, configure a *L2Advertisement* resource which will define which node advertises a service to the local network which has been preconfigured for your lab environment:
+neutron-operator-controller-manager-5755996c4b-ctbf8              2/2     Running     0          7m19s
+openstack-ansibleee-operator-controller-manager-6d7d77fc45pdtfj   2/2     Running     0          7m13s
+openstack-operator-controller-manager-56fb74ccb7-r8lvn            2/2     Running     0          7m1s
+dataplane-operator-controller-manager-6844bfd645-f2zvs            2/2     Running     0          7m1s
+glance-operator-controller-manager-596b56cd5-rvfrm                2/2     Running     0          6m59s
+swift-operator-controller-manager-df5fbbbc5-zscc5                 2/2     Running     0          6m49s
+octavia-operator-controller-manager-6549bc8f-r6xbp                2/2     Running     0          6m42s
+openstack-baremetal-operator-controller-manager-7cd655c4c7f5glm   2/2     Running     0          6m42s
+barbican-operator-controller-manager-69b766c996-ldg4n             2/2     Running     0          6m28s
+(...)
+----
++
+Wait to see all the *Running* pods in *READY* state.
+
+. Configure Secure Access for OpenStack Services
++
+NOTE: We will be utilizing a preconfigured yaml file (`files/osp-ng-ctlplane-secret.yaml`) to create a base64 password for the heat and the other services.
+
+. Create the Secret:
 +
 [source,bash,role=execute]
 ----
-oc apply -f osp-ng-metal-lb-l2-advertisements.yaml
+oc create -f osp-ng-ctlplane-secret.yaml
 ----
 
-. Verify the configuration:
+. Verify the *Secret* was created:
 +
 [source,bash,role=execute]
 ----
-oc get l2advertisements.metallb.io -n metallb-system 
+oc describe secret osp-secret -n openstack
 ----
-+
-.Sample output
-----
-NAME          IPADDRESSPOOLS    IPADDRESSPOOL SELECTORS   INTERFACES
-ctlplane      ["ctlplane"]                                ["enp1s0"]
-internalapi   ["internalapi"]                             ["enp1s0.20"]
-storage       ["storage"]                                 ["enp1s0.21"]
-tenant        ["tenant"]                                  ["enp1s0.22"]
-----
-
-FIXME: Any explanation about the significance of these?

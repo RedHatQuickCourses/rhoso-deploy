@@ -1,4 +1,4 @@
-= Verify Dataplane deployment
+= Verify data plane deployment
 
 . Track the deployment process by observing logs.
 
@@ -18,24 +18,7 @@ edpm-compute-0             : ok=53   changed=26   unreachable=0    failed=0    s
 +
 Press Ctrl-C to exit.
 
-. List running jobs
-+
-[source,bash,role=execute]
-----
-oc get jobs -n openstack
-----
-
-. Check logs of running jobs (Use the job which is not completed yet)
-+
-.Example:
-[source,bash,role=execute]
-----
-oc logs jobs/libvirt-openstack-edpm-ipam -f
-----
-
-. Verify the deployment status using the bleow steps:
-
-. Check the status of Openstack Dataplane Deployment.
+. Check the status of Openstack data plane Deployment.
 +
 [source,bash,role=execute]
 ----
@@ -50,7 +33,7 @@ NAME                  STATUS   MESSAGE
 openstack-edpm-ipam   True     Setup Complete
 ----
 
-. Check the status of Openstack Dataplane Nodeset deployment.
+. Check the status of Openstack data plane Nodeset deployment.
 +
 [source,bash,role=execute]
 ----
@@ -65,4 +48,116 @@ NAME                  STATUS   MESSAGE
 openstack-edpm-ipam   True     NodeSet Ready
 ----
 
-FIXME: Review and add additional steps as required
+FIXME: review below steps
+
+**Troubleshooting data plane deployment:**
+
+Pre-configured YAML files suitable for the lab environment are provided with this training.
+However, you may face any issue with the deployment. 
+Follow below steps to track the progress with the data plane deployment and troubleshoot it.
+
+. Check the status of the deployment, it is in progress.
++
+[source,bash,role=execute]
+----
+oc get openstackdataplanedeployments.dataplane.openstack.org 
+oc get openstackdataplanenodesets.dataplane.openstack.org 
+----
++
+.Sample output
+----
+NAME                  NODESETS                  STATUS   MESSAGE
+openstack-edpm-ipam   ["openstack-edpm-ipam"]   False    Deployment in progress
+
+ . . . 
+
+NAME                  STATUS   MESSAGE
+openstack-edpm-ipam   False    Deployment in progress
+----
+
+. List running jobs
++
+[source,bash,role=execute]
+----
+oc get jobs
+----
++
+.Sample output
+----
+NAME                                 COMPLETIONS   DURATION   AGE
+bootstrap-openstack-edpm-ipam        1/1           103s       2m27s
+cinder-db-purge-28585441             1/1           34s        11h
+>> download-cache-openstack-edpm-ipam   0/1           43s        43s << 
+glance-purge-cron-28585441           1/1           17s        11h
+keystone-cron-28585981               1/1           25s        155m
+keystone-cron-28586041               1/1           27s        95m
+keystone-cron-28586101               1/1           44s        35m
+----
++
+Make note of the job in progress (not completed) in the above output.
+
+. Check the logs of running job to track it's progress and investigate any failure.
++
+.Example:
+----
+oc logs jobs/download-cache-openstack-edpm-ipam -f
+----
+
+**Troubleshooting networking on compute node:**
+
+Netwroking setup of the data plane deployment could be error prone while you are tweaking your YAML files.
+You may loose the connectivity of the compute node due to any misconfiguration in the files.
+You may need to tweak the data plane network configuration files for appropriate networking setup (os-net-config) on the compute node.
+
+
+If you are encountering errors related to any network related job, follow these steps:
+
+. Access the compute node and review `/etc/os-net-confg/config.yaml`.
+. Make necessary tweaks and run `os-net-config` command manually.
+. Repeate above step until you get the networking setup as desired.
+. You may loose the network access to the compute node due to application of misconfigured os-net-config settings.
+. You may access the node over the console if it is not reachable on the network.
+. Reset the network settings of the compute node with below steps:
+.. Log in to the compute node as the root user via console.
+.. Delete OVS bridges:
++
+[source,bash,role=execute]
+----
+ovs-vsctl del-br br-osp
+ovs-vsctl del-br br-ex
+----
+
+.. Delete current network configuration files:
++
+[source,bash,role=execute]
+----
+rm -f /etc/sysconfig/network-scripts/ifcfg-*
+----
+
+.. Reboot the compute node to restore network connectivity.
+
+. Once a working configuration is achieved, update related changes in `osp-ng-dataplane-node-set-deploy.yaml` and `osp-ng-dataplane-netconfig.yaml` as per requirement.
+. Apply the settings using `oc apply` command.
+
+
+**Re-run Data Plane Deployment:**
+
+During troubleshooting, if needed, delete the existing data plane deployment and re-run it:
+
+Deleting the data plane node set and deployment will clean up all the related jobs and associated pods and you may start from scratch.
+
+. Delete existing deployment:
++
+[source,bash,role=execute]
+----
+oc delete -f osp-ng-dataplane-deployment.yaml
+oc delete -f osp-ng-dataplane-node-set-deploy.yaml
+----
+
+. Re-run the deployment:
++
+[source,bash,role=execute]
+----
+oc apply -f osp-ng-dataplane-node-set-deploy.yaml
+oc apply -f osp-ng-dataplane-deployment.yaml
+----

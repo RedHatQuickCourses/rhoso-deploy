@@ -30,8 +30,8 @@ FIXME: Make sure the demo lab stays for long time. Create it's copy under PERT o
 * Traditional TripleO deployment verses deployment with OpenShift cluster.
 * RHOSO deployment process overview.
 * Pre-requisites for RHOSO deployment.
-* Deploy Controlplane services on the RHOCP cluster.
-* Verify functionality of Controlplane services.
-* Deploy Dataplane node using RHOCP cluster.
-* Verify functionality of Dataplane deployment.
+* Deploy control plane services on the RHOCP cluster.
+* Verify functionality of control plane services.
+* Deploy data plane node using RHOCP cluster.
+* Verify functionality of data plane deployment.
 * Verify RHOSP cluster function by deploying workload on it.

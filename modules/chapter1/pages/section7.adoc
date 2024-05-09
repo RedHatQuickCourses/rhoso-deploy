@@ -2,8 +2,6 @@
 
 Using a preconfigured yaml file(*files/osp-ng-dataplane-netconfig.yaml*) we will configure the topology for each data plane network.
 
-FIXME: see if pre-configured files can be avoided
-
 . Change directory to the files:
 +
 [source,bash,role=execute]
@@ -18,7 +16,7 @@ cd ~/labrepo/content/files
 oc apply -f osp-ng-dataplane-netconfig.yaml
 ----
 
-. Create VM for Dataplane
+. *Create VM for data plane*
 
 .. Log out from the bastion so that we go back to the hypervisor machine:
 +
@@ -38,7 +36,8 @@ logout
 ----
 sudo -i
 cd /var/lib/libvirt/images
-cp rhel-9.3-x86_64-kvm.qcow2 rhel9-guest.qcow2
+wget http://opentraining-na100.ole.redhat.com/downloads/images/rhel9-3.qcow2
+cp rhel9-3.qcow2 rhel9-guest.qcow2
 qemu-img info rhel9-guest.qcow2
 qemu-img resize rhel9-guest.qcow2 +90G
 chown -R qemu:qemu rhel9-*.qcow2
@@ -139,8 +138,6 @@ sudo subscription-manager repos --disable=*
 subscription-manager repos --enable=rhceph-6-tools-for-rhel-9-x86_64-rpms --enable=rhel-9-for-x86_64-baseos-rpms --enable=rhel-9-for-x86_64-appstream-rpms --enable=rhel-9-for-x86_64-highavailability-rpms --enable=openstack-dev-preview-for-rhel-9-x86_64-rpms --enable=fast-datapath-for-rhel-9-x86_64-rpms
 ----
 
-FIXME: `openstack-dev-preview-for-rhel-9-x86_64-rpms` is not available via rhn. Need it's repository to avoid use of demo satellite.
-
 .. Install podman on the compute and login to registries
 +
 [source,bash,role=execute]
@@ -203,7 +200,7 @@ ssh-keygen -f ./id -t ecdsa-sha2-nistp521 -N ''
 oc create secret generic nova-migration-ssh-key --from-file=ssh-privatekey=id --from-file=ssh-publickey=id.pub -n openstack -o yaml | oc apply -f-
 ----
 
-. Deploy the Dataplane
+. Deploy the data plane
 +
 [source,bash,role=execute]
 ----
@@ -211,4 +208,4 @@ oc apply -f osp-ng-dataplane-node-set-deploy.yaml
 oc apply -f osp-ng-dataplane-deployment.yaml
 ----
 
-. The dataplane deployment takes several minutes, go to next page for steps to track the progress of your deployment.
+. The data plane deployment takes several minutes, go to next page for steps to track the progress of your deployment.
