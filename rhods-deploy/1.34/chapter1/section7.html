@@ -55,22 +55,22 @@
     <a class="nav-link" href="section2.html">Perform Prerequisite Operations</a>
   </li>
   <li class="nav-item" data-depth="1">
-    <a class="nav-link" href="section3.html">Install the OpenStack Operator</a>
+    <a class="nav-link" href="section3.html">Preparing RHOCP for RHOSP Network Isolation</a>
   </li>
   <li class="nav-item" data-depth="1">
-    <a class="nav-link" href="section4.html">Preparing RHOCP for RHOSP Network Isolation</a>
+    <a class="nav-link" href="section4.html">Install the OpenStack Operator</a>
   </li>
   <li class="nav-item" data-depth="1">
     <a class="nav-link" href="section5.html">Create the OpenStack Control Plane</a>
   </li>
   <li class="nav-item" data-depth="1">
-    <a class="nav-link" href="section6.html">Verify OpenStack Controlplane configuration</a>
+    <a class="nav-link" href="section6.html">Verify OpenStack control plane configuration</a>
   </li>
   <li class="nav-item is-current-page" data-depth="1">
     <a class="nav-link" href="section7.html">Create the Data Plane</a>
   </li>
   <li class="nav-item" data-depth="1">
-    <a class="nav-link" href="section8.html">Verify Dataplane deployment</a>
+    <a class="nav-link" href="section8.html">Verify data plane deployment</a>
   </li>
   <li class="nav-item" data-depth="1">
     <a class="nav-link" href="section9.html">Access OpenStack</a>
@@ -119,9 +119,6 @@
 <div class="paragraph">
 <p>Using a preconfigured yaml file(<strong>files/osp-ng-dataplane-netconfig.yaml</strong>) we will configure the topology for each data plane network.</p>
 </div>
-<div class="paragraph">
-<p>FIXME: see if pre-configured files can be avoided</p>
-</div>
 <div class="olist arabic">
 <ol class="arabic">
 <li>
@@ -141,7 +138,7 @@
 </div>
 </li>
 <li>
-<p>Create VM for Dataplane</p>
+<p><strong>Create VM for data plane</strong></p>
 <div class="olist loweralpha">
 <ol class="loweralpha" type="a">
 <li>
@@ -164,7 +161,8 @@
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">sudo -i
 cd /var/lib/libvirt/images
-cp rhel-9.3-x86_64-kvm.qcow2 rhel9-guest.qcow2
+wget http://opentraining-na100.ole.redhat.com/downloads/images/rhel9-3.qcow2
+cp rhel9-3.qcow2 rhel9-guest.qcow2
 qemu-img info rhel9-guest.qcow2
 qemu-img resize rhel9-guest.qcow2 +90G
 chown -R qemu:qemu rhel9-*.qcow2
@@ -276,16 +274,6 @@ subscription-manager repos --enable=rhceph-6-tools-for-rhel-9-x86_64-rpms --enab
 </div>
 </div>
 </li>
-</ol>
-</div>
-</li>
-</ol>
-</div>
-<div class="paragraph">
-<p>FIXME: <code>openstack-dev-preview-for-rhel-9-x86_64-rpms</code> is not available via rhn. Need it&#8217;s repository to avoid use of demo satellite.</p>
-</div>
-<div class="olist loweralpha">
-<ol class="loweralpha" type="a">
 <li>
 <p>Install podman on the compute and login to registries</p>
 <div class="listingblock execute">
@@ -309,8 +297,10 @@ subscription-manager repos --enable=rhceph-6-tools-for-rhel-9-x86_64-rpms --enab
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">virsh snapshot-create-as osp-compute0 preprovisioned</code></pre>
 </div>
 </div>
-<div class="olist arabic">
-<ol class="arabic">
+</li>
+</ol>
+</div>
+</li>
 <li>
 <p>Set SSH key for root user on the compute server.</p>
 <div class="listingblock execute">
@@ -318,9 +308,6 @@ subscription-manager repos --enable=rhceph-6-tools-for-rhel-9-x86_64-rpms --enab
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">scp /root/.ssh/id_rsa root@192.168.123.100:/root/.ssh/id_rsa_compute
 scp /root/.ssh/id_rsa.pub root@192.168.123.100:/root/.ssh/id_rsa_compute.pub</code></pre>
 </div>
-</div>
-</li>
-</ol>
 </div>
 </li>
 </ol>
@@ -385,7 +372,7 @@ oc create secret generic nova-migration-ssh-key --from-file=ssh-privatekey=id --
 </div>
 </li>
 <li>
-<p>Deploy the Dataplane</p>
+<p>Deploy the data plane</p>
 <div class="listingblock execute">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">oc apply -f osp-ng-dataplane-node-set-deploy.yaml
@@ -394,13 +381,13 @@ oc apply -f osp-ng-dataplane-deployment.yaml</code></pre>
 </div>
 </li>
 <li>
-<p>The dataplane deployment takes several minutes, go to next page for steps to track the progress of your deployment.</p>
+<p>The data plane deployment takes several minutes, go to next page for steps to track the progress of your deployment.</p>
 </li>
 </ol>
 </div>
 <nav class="pagination">
-  <span class="prev"><a href="section6.html">Verify OpenStack Controlplane configuration</a></span>
-  <span class="next"><a href="section8.html">Verify Dataplane deployment</a></span>
+  <span class="prev"><a href="section6.html">Verify OpenStack control plane configuration</a></span>
+  <span class="next"><a href="section8.html">Verify data plane deployment</a></span>
 </nav>
 </article>
   </div>

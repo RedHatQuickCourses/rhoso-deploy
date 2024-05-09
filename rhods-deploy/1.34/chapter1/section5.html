@@ -55,22 +55,22 @@
     <a class="nav-link" href="section2.html">Perform Prerequisite Operations</a>
   </li>
   <li class="nav-item" data-depth="1">
-    <a class="nav-link" href="section3.html">Install the OpenStack Operator</a>
+    <a class="nav-link" href="section3.html">Preparing RHOCP for RHOSP Network Isolation</a>
   </li>
   <li class="nav-item" data-depth="1">
-    <a class="nav-link" href="section4.html">Preparing RHOCP for RHOSP Network Isolation</a>
+    <a class="nav-link" href="section4.html">Install the OpenStack Operator</a>
   </li>
   <li class="nav-item is-current-page" data-depth="1">
     <a class="nav-link" href="section5.html">Create the OpenStack Control Plane</a>
   </li>
   <li class="nav-item" data-depth="1">
-    <a class="nav-link" href="section6.html">Verify OpenStack Controlplane configuration</a>
+    <a class="nav-link" href="section6.html">Verify OpenStack control plane configuration</a>
   </li>
   <li class="nav-item" data-depth="1">
     <a class="nav-link" href="section7.html">Create the Data Plane</a>
   </li>
   <li class="nav-item" data-depth="1">
-    <a class="nav-link" href="section8.html">Verify Dataplane deployment</a>
+    <a class="nav-link" href="section8.html">Verify data plane deployment</a>
   </li>
   <li class="nav-item" data-depth="1">
     <a class="nav-link" href="section9.html">Access OpenStack</a>
@@ -121,6 +121,9 @@
 <div class="sectionbody">
 <div class="paragraph">
 <p>We will be using a preconfigured file (<strong>files/osp-ng-ctlplane-deploy.yaml</strong>) to create the control plane and at the same time enable the required services, configure the control plane network, and configure the service back ends.</p>
+</div>
+<div class="paragraph">
+<p>FIXME: review below.</p>
 </div>
 <div class="paragraph">
 <p>Sample configuration files in the form of Validated Architectures (VAs) may be provided as Feature Pack after release of RHOSP18.
@@ -183,14 +186,10 @@ chmod 777 /nfs/pv*</code></pre>
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">oc create secret generic glance-cinder-config --from-file=glance-conf</code></pre>
 </div>
 </div>
-</li>
-</ol>
-</div>
 <div class="paragraph">
 <p>FIXME: Explain about above configuration and add steps to verify the things are configured as expected.</p>
 </div>
-<div class="olist arabic">
-<ol class="arabic">
+</li>
 <li>
 <p>Finally create the OpenStack control plane</p>
 <div class="listingblock execute">
@@ -206,9 +205,6 @@ chmod 777 /nfs/pv*</code></pre>
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">oc get openstackcontrolplane -n openstack</code></pre>
 </div>
 </div>
-</li>
-</ol>
-</div>
 <div class="admonitionblock warning">
 <table>
 <tr>
@@ -221,9 +217,46 @@ This can take several minutes.
 </tr>
 </table>
 </div>
-<div class="paragraph">
-<p>Repeat the query until MESSAGE is Setup complete</p>
+</li>
+<li>
+<p>Check running jobs for openstack control plane deployment.</p>
+<div class="listingblock execute">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">oc get jobs</code></pre>
 </div>
+</div>
+<div class="listingblock">
+<div class="title">Sample output</div>
+<div class="content">
+<pre>NAME                 COMPLETIONS   DURATION   AGE
+glance-db-create     1/1           6s         66s
+glance-db-sync       1/1           22s        56s
+keystone-bootstrap   0/1           1s         1s
+keystone-db-create   1/1           6s         37s
+keystone-db-sync     1/1           16s        27s
+neutron-db-create    1/1           4s         38s</pre>
+</div>
+</div>
+</li>
+<li>
+<p>To track the progress or troubleshoot, you may check the logs for the job which is not completed.</p>
+<div class="listingblock">
+<div class="title">Example:</div>
+<div class="content">
+<pre>oc logs job/keystone-bootstrap</pre>
+</div>
+</div>
+</li>
+<li>
+<p>Check again for the status of openstack control plane deployment.</p>
+<div class="listingblock execute">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">oc get openstackcontrolplane -n openstack</code></pre>
+</div>
+</div>
+</li>
+<li>
+<p>Repeat the query until MESSAGE is Setup complete</p>
 <div class="listingblock">
 <div class="title">Sample Output</div>
 <div class="content">
@@ -231,11 +264,14 @@ This can take several minutes.
 openstack-galera-network-isolation   True     Setup complete</pre>
 </div>
 </div>
+</li>
+</ol>
+</div>
 </div>
 </div>
 <nav class="pagination">
-  <span class="prev"><a href="section4.html">Preparing RHOCP for RHOSP Network Isolation</a></span>
-  <span class="next"><a href="section6.html">Verify OpenStack Controlplane configuration</a></span>
+  <span class="prev"><a href="section4.html">Install the OpenStack Operator</a></span>
+  <span class="next"><a href="section6.html">Verify OpenStack control plane configuration</a></span>
 </nav>
 </article>
   </div>
