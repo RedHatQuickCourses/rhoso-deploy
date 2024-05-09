@@ -276,6 +276,16 @@ subscription-manager repos --enable=rhceph-6-tools-for-rhel-9-x86_64-rpms --enab
 </div>
 </div>
 </li>
+</ol>
+</div>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>FIXME: <code>openstack-dev-preview-for-rhel-9-x86_64-rpms</code> is not available via rhn. Need it&#8217;s repository to avoid use of demo satellite.</p>
+</div>
+<div class="olist loweralpha">
+<ol class="loweralpha" type="a">
 <li>
 <p>Install podman on the compute and login to registries</p>
 <div class="listingblock execute">
@@ -299,10 +309,8 @@ subscription-manager repos --enable=rhceph-6-tools-for-rhel-9-x86_64-rpms --enab
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">virsh snapshot-create-as osp-compute0 preprovisioned</code></pre>
 </div>
 </div>
-</li>
-</ol>
-</div>
-</li>
+<div class="olist arabic">
+<ol class="arabic">
 <li>
 <p>Set SSH key for root user on the compute server.</p>
 <div class="listingblock execute">
@@ -310,6 +318,9 @@ subscription-manager repos --enable=rhceph-6-tools-for-rhel-9-x86_64-rpms --enab
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">scp /root/.ssh/id_rsa root@192.168.123.100:/root/.ssh/id_rsa_compute
 scp /root/.ssh/id_rsa.pub root@192.168.123.100:/root/.ssh/id_rsa_compute.pub</code></pre>
 </div>
+</div>
+</li>
+</ol>
 </div>
 </li>
 </ol>
