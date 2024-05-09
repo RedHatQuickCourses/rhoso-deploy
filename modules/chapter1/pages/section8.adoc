@@ -48,7 +48,7 @@ NAME                  STATUS   MESSAGE
 openstack-edpm-ipam   True     NodeSet Ready
 ----
 
-FIXME: review below steps
+FIXME: review below steps till end.
 
 **Troubleshooting data plane deployment:**
 
