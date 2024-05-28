@@ -3,9 +3,9 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>Create data plane :: RHOSP18 - Provision Control Plane Services and Manage Data Plane Nodes</title>
-    <link rel="prev" href="section5.5.html">
-    <link rel="next" href="section6.1.html">
+    <title>Install MetalLB Operator :: RHOSP18 - Provision Control Plane Services and Manage Data Plane Nodes</title>
+    <link rel="prev" href="section2.3.html">
+    <link rel="next" href="section2.5.html">
     <meta name="generator" content="Antora 3.1.3">
     <link rel="stylesheet" href="../../../_/css/site.css">
     <script>var uiRootPath = '../../../_'</script>
@@ -73,7 +73,7 @@
   <li class="nav-item" data-depth="2">
     <a class="nav-link" href="section2.3.html">Install NMState Operator</a>
   </li>
-  <li class="nav-item" data-depth="2">
+  <li class="nav-item is-current-page" data-depth="2">
     <a class="nav-link" href="section2.4.html">Install MetalLB Operator</a>
   </li>
   <li class="nav-item" data-depth="2">
@@ -132,7 +132,7 @@
   </li>
 </ul>
   </li>
-  <li class="nav-item is-current-page" data-depth="1">
+  <li class="nav-item" data-depth="1">
     <button class="nav-item-toggle"></button>
     <a class="nav-link" href="section6.html">Create data plane</a>
 <ul class="nav-list">
@@ -190,7 +190,8 @@
 <nav class="breadcrumbs" aria-label="breadcrumbs">
   <ul>
     <li><a href="../index.html">RHOSP18 - Provision Control Plane Services and Manage Data Plane Nodes</a></li>
-    <li><a href="section6.html">Create data plane</a></li>
+    <li><a href="section2.1.html">Prerequisites for Installation</a></li>
+    <li><a href="section2.4.html">Install MetalLB Operator</a></li>
   </ul>
 </nav>
 </div>
@@ -199,17 +200,175 @@
   <div class="toc-menu"></div>
 </aside>
 <article class="doc">
-<h1 class="page">Create data plane</h1>
-<div class="paragraph">
-<p>In this section we will deploy the data plane with a pre-provisioned compute node in our RHOSP cluster.</p>
+<h1 class="page">Install MetalLB Operator</h1>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Create the <code>MetalLB</code> Operator namespace:</p>
+<div class="listingblock execute">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">cat &lt;&lt; EOF | oc apply -f -
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: metallb-system
+EOF</code></pre>
+</div>
+</div>
+</li>
+<li>
+<p>Verify the namespace is created:</p>
+<div class="listingblock execute">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">oc get ns metallb-system  -o custom-columns=Name:.metadata.name,Status:.status.phase</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">Sample output</div>
+<div class="content">
+<pre>Name             Status
+metallb-system   Active</pre>
+</div>
+</div>
+</li>
+<li>
+<p>Create the OperatorGroup:</p>
+<div class="listingblock execute">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">cat &lt;&lt; EOF | oc apply -f -
+apiVersion: operators.coreos.com/v1
+kind: OperatorGroup
+metadata:
+  name: metallb-operator
+  namespace: metallb-system
+EOF</code></pre>
+</div>
+</div>
+</li>
+<li>
+<p>Confirm the OperatorGroup is installed in the namespace:</p>
+<div class="listingblock execute">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">oc get operatorgroup -n metallb-system</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">Sample Output</div>
+<div class="content">
+<pre>NAME               AGE
+metallb-operator   5s</pre>
+</div>
+</div>
+</li>
+<li>
+<p>Subscribe to the metallb Operator:</p>
+<div class="listingblock execute">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">cat &lt;&lt; EOF| oc apply -f -
+apiVersion: operators.coreos.com/v1alpha1
+kind: Subscription
+metadata:
+  name: metallb-operator-sub
+  namespace: metallb-system
+spec:
+  channel: stable
+  name: metallb-operator
+  source: redhat-operators
+  sourceNamespace: openshift-marketplace
+EOF</code></pre>
+</div>
+</div>
+</li>
+<li>
+<p>Confirm the metallb installplan is in the namespace:</p>
+<div class="listingblock execute">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">oc get installplan -n metallb-system</code></pre>
+</div>
+</div>
+</li>
+<li>
+<p>Confirm the metallb operator is installed:</p>
+<div class="listingblock execute">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">oc get clusterserviceversion -n metallb-system -o custom-columns=Name:.metadata.name,Phase:.status.phase</code></pre>
+</div>
+</div>
+</li>
+<li>
+<p>Repeat the query until the Phase is Succeeded.</p>
+<div class="listingblock">
+<div class="title">Sample Output</div>
+<div class="content">
+<pre>Name                                    Phase
+metallb-operator.v4.13.0-202404030309   Succeeded</pre>
+</div>
 </div>
 <div class="paragraph">
-<p>We will use <code>OpenStackDataPlaneNodeSet</code> CRD to define the nodes and the layout of the data plane.
-We will trigger the deployment process with <code>OpenStackDataPlaneDeployment</code> custom resource.</p>
+<p>Track the progress using below command:</p>
+</div>
+<div class="listingblock execute">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">while ! (oc get clusterserviceversion -n metallb-system -o custom-columns=Name:.metadata.name,Phase:.status.phase | grep metallb-operator | grep Succeeded); do oc get clusterserviceversion -n metallb-system; sleep 5; done</code></pre>
+</div>
+</div>
+</li>
+<li>
+<p>Create a single instance of a metallb resource:</p>
+<div class="listingblock execute">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">cat &lt;&lt; EOF | oc apply -f -
+apiVersion: metallb.io/v1beta1
+kind: MetalLB
+metadata:
+  name: metallb
+  namespace: metallb-system
+EOF</code></pre>
+</div>
+</div>
+</li>
+<li>
+<p>Verify that the deployment for the controller is running:</p>
+<div class="listingblock execute">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">oc get deployment -n metallb-system controller</code></pre>
+</div>
+</div>
+</li>
+<li>
+<p>Repeat the command until AVAILABLE is 1</p>
+<div class="listingblock">
+<div class="title">Sample Output</div>
+<div class="content">
+<pre>NAME         READY   UP-TO-DATE   AVAILABLE   AGE
+controller   1/1     1            1           21s</pre>
+</div>
+</div>
+</li>
+<li>
+<p>Verify that the daemon set for the speaker is running:</p>
+<div class="listingblock execute">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">oc get daemonset -n metallb-system speaker</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">Sample Output</div>
+<div class="content">
+<pre>oc get daemonset -n metallb-system speaker
+NAME      DESIRED   CURRENT   READY   UP-TO-DATE   AVAILABLE   NODE SELECTOR            AGE
+speaker   6         6         6       6            6           kubernetes.io/os=linux   55s</pre>
+</div>
+</div>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p><strong>Reference:</strong> see <a href="https://access.redhat.com/documentation/en-us/openshift_container_platform/4.12/html/networking/load-balancing-with-metallb#metallb-operator-install">Installing the MetalLB Operator</a> in the RHOCP Networking guide</p>
 </div>
 <nav class="pagination">
-  <span class="prev"><a href="section5.5.html">Verify OpenStack control plane configuration</a></span>
-  <span class="next"><a href="section6.1.html">Create the Data Plane Network configuration</a></span>
+  <span class="prev"><a href="section2.3.html">Install NMState Operator</a></span>
+  <span class="next"><a href="section2.5.html">Install Cert-Manager Operator</a></span>
 </nav>
 </article>
   </div>

@@ -3,9 +3,8 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>Create data plane :: RHOSP18 - Provision Control Plane Services and Manage Data Plane Nodes</title>
-    <link rel="prev" href="section5.5.html">
-    <link rel="next" href="section6.1.html">
+    <title>Express Install :: RHOSP18 - Provision Control Plane Services and Manage Data Plane Nodes</title>
+    <link rel="prev" href="section9.html">
     <meta name="generator" content="Antora 3.1.3">
     <link rel="stylesheet" href="../../../_/css/site.css">
     <script>var uiRootPath = '../../../_'</script>
@@ -132,7 +131,7 @@
   </li>
 </ul>
   </li>
-  <li class="nav-item is-current-page" data-depth="1">
+  <li class="nav-item" data-depth="1">
     <button class="nav-item-toggle"></button>
     <a class="nav-link" href="section6.html">Create data plane</a>
 <ul class="nav-list">
@@ -156,7 +155,7 @@
   <li class="nav-item" data-depth="1">
     <a class="nav-link" href="section9.html">Access OpenStack</a>
   </li>
-  <li class="nav-item" data-depth="1">
+  <li class="nav-item is-current-page" data-depth="1">
     <a class="nav-link" href="section10.html">Express Install</a>
   </li>
 </ul>
@@ -190,7 +189,7 @@
 <nav class="breadcrumbs" aria-label="breadcrumbs">
   <ul>
     <li><a href="../index.html">RHOSP18 - Provision Control Plane Services and Manage Data Plane Nodes</a></li>
-    <li><a href="section6.html">Create data plane</a></li>
+    <li><a href="section10.html">Express Install</a></li>
   </ul>
 </nav>
 </div>
@@ -199,17 +198,90 @@
   <div class="toc-menu"></div>
 </aside>
 <article class="doc">
-<h1 class="page">Create data plane</h1>
-<div class="paragraph">
-<p>In this section we will deploy the data plane with a pre-provisioned compute node in our RHOSP cluster.</p>
+<h1 class="page">Express Install</h1>
+<div class="admonitionblock important">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-important" title="Important"></i>
+</td>
+<td class="content">
+This is not the recommended way of deployment for the purpose of this training.
+The deployment scripts provided here are ment to work only on this specific demo lab environment.
+</td>
+</tr>
+</table>
 </div>
 <div class="paragraph">
-<p>We will use <code>OpenStackDataPlaneNodeSet</code> CRD to define the nodes and the layout of the data plane.
-We will trigger the deployment process with <code>OpenStackDataPlaneDeployment</code> custom resource.</p>
+<p><strong>Note:</strong></p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>The scripts are to be executed in the mentioned sequence below.</p>
+</li>
+<li>
+<p>The script will make use of pre-configured files for the deployment.</p>
+</li>
+<li>
+<p>Make sure you execute the specific script on the mentioned node.</p>
+</li>
+<li>
+<p>For execution of the scripts on the other nodes than bastion:</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Create the script file on that node with the requreid content and execute the script.</p>
+<div class="paragraph">
+<p><strong>or</strong></p>
+</div>
+</li>
+<li>
+<p>Just cat the script on bastion node and copy-paste the commands from there in the relevant node.</p>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p><strong>Follow below steps for Express Install:</strong></p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Login to the bastion node as root and clone the <code>rhoso-deploy-files</code> repo if you have not already cloned it.</p>
+<div class="listingblock">
+<div class="content">
+<pre>git clone https://github.com/RedHatQuickCourses/rhoso-deploy-files.git
+cd rhoso-deploy-files</pre>
+</div>
+</div>
+</li>
+<li>
+<p>Go to the directory of pre-configured files and execute the first script form the scripts, directory.</p>
+<div class="listingblock">
+<div class="content">
+<pre>../scripts/1.sh</pre>
+</div>
+</div>
+</li>
+<li>
+<p>Run the second script <code>2.sh</code> on the hypervisor node as root user.</p>
+</li>
+<li>
+<p>Login to newly created compute node as root user to execute the third script <code>3.sh</code> on it.</p>
+</li>
+<li>
+<p>Login again to the bastion node as root user to exeute the fourth script <code>4.sh</code> on it.</p>
+</li>
+<li>
+<p>Finally access <code>openstackclient</code> pod&#8217;s shell to execute content of the fifth script <code>5.sh</code> from there.</p>
+</li>
+</ol>
 </div>
 <nav class="pagination">
-  <span class="prev"><a href="section5.5.html">Verify OpenStack control plane configuration</a></span>
-  <span class="next"><a href="section6.1.html">Create the Data Plane Network configuration</a></span>
+  <span class="prev"><a href="section9.html">Access OpenStack</a></span>
 </nav>
 </article>
   </div>

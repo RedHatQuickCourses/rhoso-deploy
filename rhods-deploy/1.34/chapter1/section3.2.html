@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Setting up Node Network Configuration Policy :: RHOSP18 - Provision Control Plane Services and Manage Data Plane Nodes</title>
+    <link rel="prev" href="section3.1.html">
+    <link rel="next" href="section3.3.html">
+    <meta name="generator" content="Antora 3.1.3">
+    <link rel="stylesheet" href="../../../_/css/site.css">
+    <script>var uiRootPath = '../../../_'</script>
+  </head>
+  <body class="article">
+<header class="header">
+  <nav class="navbar">
+    <div class="navbar-brand">
+      <a class="navbar-item" href="https://www.redhat.com" target="_blank"><img src="../../../_/img/redhat-logo.png" height="40px" alt="Red Hat"></a>
+      <a class="navbar-item" style="font-size: 24px; color: white" href="../../..">RHOSP18 - Provision Control Plane Services and Manage Data Plane Nodes</a>
+      <button class="navbar-burger" data-target="topbar-nav">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+    <div id="topbar-nav" class="navbar-menu">
+      <div class="navbar-end">
+        <a class="navbar-item" href="https://github.com/RedHatQuickCourses/changeme/issues" target="_blank">Report Issues</a>
+      </div>
+    </div>
+  </nav>
+</header><div class="body">
+<div class="nav-container" data-component="rhods-deploy" data-version="1.34">
+  <aside class="nav">
+    <div class="panels">
+<div class="nav-panel-menu is-active" data-panel="menu">
+  <nav class="nav-menu">
+    <h3 class="title"><a href="../index.html">RHOSP18 - Provision Control Plane Services and Manage Data Plane Nodes</a></h3>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="0">
+<ul class="nav-list">
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="../index.html">Home</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="0">
+<ul class="nav-list">
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="section1.html">Introduction</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="section1.1.html">Traditional TripleO deployment verses deployment with OpenShift cluster.</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="section1.2.html">RHOSO installation process overview</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="section1.3.html">RHOSO Installation Process in this Training</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="section1.4.html">Network Configuration in this Training</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="section2.1.html">Prerequisites for Installation</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="section2.2.html">About the Prerequisite Operators</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="section2.3.html">Install NMState Operator</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="section2.4.html">Install MetalLB Operator</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="section2.5.html">Install Cert-Manager Operator</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="section3.1.html">Preparing RHOCP for RHOSP Network Isolation</a>
+<ul class="nav-list">
+  <li class="nav-item is-current-page" data-depth="2">
+    <a class="nav-link" href="section3.2.html">Setting up Node Network Configuration Policy</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="section3.3.html">Configuring Network Attachment Definition</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="section3.4.html">Configure MetalLB IP Address Pools</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="section3.5.html">Setup MetalLB L2 Advertisement configuration</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="section4.html">Storage</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="section4.1.html">Configuring NFS storage</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="section4.2.html">Verify storage configuration</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="section5.html">Install control plane</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="section5.1.html">Configure the secrets</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="section5.2.html">Install the OpenStack Operator</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="section5.3.html">Create the OpenStack Control Plane</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="section5.4.html">Troubleshoot the OpenStack Control Plane</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="section5.5.html">Verify OpenStack control plane configuration</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="section6.html">Create data plane</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="section6.1.html">Create the Data Plane Network configuration</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="section6.2.html">Create the Data Plane VM</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="section6.3.html">Data Plane Deployment</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="section6.4.html">Troubleshoot the Data Plane deployment</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="section6.5.html">Verify data plane deployment</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="section9.html">Access OpenStack</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="section10.html">Express Install</a>
+  </li>
+</ul>
+  </li>
+</ul>
+  </nav>
+</div>
+<div class="nav-panel-explore" data-panel="explore">
+  <div class="context">
+    <span class="title">RHOSP18 - Provision Control Plane Services and Manage Data Plane Nodes</span>
+    <span class="version">1.34</span>
+  </div>
+  <ul class="components">
+    <li class="component is-current">
+      <a class="title" href="../index.html">RHOSP18 - Provision Control Plane Services and Manage Data Plane Nodes</a>
+      <ul class="versions">
+        <li class="version is-current is-latest">
+          <a href="../index.html">1.34</a>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</div>
+    </div>
+  </aside>
+</div>
+<main class="article">
+<div class="toolbar" role="navigation">
+<button class="nav-toggle"></button>
+  <a href="../index.html" class="home-link"></a>
+<nav class="breadcrumbs" aria-label="breadcrumbs">
+  <ul>
+    <li><a href="../index.html">RHOSP18 - Provision Control Plane Services and Manage Data Plane Nodes</a></li>
+    <li><a href="section3.1.html">Preparing RHOCP for RHOSP Network Isolation</a></li>
+    <li><a href="section3.2.html">Setting up Node Network Configuration Policy</a></li>
+  </ul>
+</nav>
+</div>
+  <div class="content">
+<aside class="toc sidebar" data-title="Contents" data-levels="2">
+  <div class="toc-menu"></div>
+</aside>
+<article class="doc">
+<h1 class="page">Setting up Node Network Configuration Policy</h1>
+<div class="paragraph">
+<p><strong>Rederence:</strong> See <a href="https://access.redhat.com/documentation/en-us/red_hat_openstack_platform/18.0-dev-preview/html-single/deploying_red_hat_openstack_platform_18.0_development_preview_3_on_red_hat_openshift_container_platform/index#proc_preparing-RHOCP-for-RHOSP-network-isolation_preparing">Section 3.4. Preparing RHOCP for RHOSP network isolation</a> from <em>Deploying Red Hat OpenStack Platform 18.0 Development Preview 3 on Red Hat OpenShift Container Platform guide</em>.</p>
+</div>
+<div class="paragraph">
+<p>FIME: Eleminate the configuration on the master nodes</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Create required projects for the Openstack Operator installation.</p>
+<div class="paragraph">
+<p>The next installation step for the <strong>OpenStack Operators</strong> involves creating the <strong>openstack-operators</strong> and <strong>openstack</strong> projects for the RHOSO operators.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">oc new-project openstack-operators
+oc new-project openstack</code></pre>
+</div>
+</div>
+</li>
+<li>
+<p>get list of worker nodes in your ocp cluster.</p>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">oc get nodes -l node-role.kubernetes.io/worker -o jsonpath="{.items[*].metadata.name}"</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">Sample output</div>
+<div class="content">
+<pre>ocp4-worker1.aio.example.com ocp4-worker2.aio.example.com ocp4-worker3.aio.example.com</pre>
+</div>
+</div>
+</li>
+<li>
+<p>Copy sample nncp configuration from step #4 in the documentation link provided on the section page.</p>
+<div class="paragraph">
+<p><strong>or</strong></p>
+</div>
+<div class="paragraph">
+<p>use the provided sample configuration file <code>single-nic-vlan-nncp.sample</code>.</p>
+</div>
+</li>
+<li>
+<p>Create a copy of sample config for one of your nodes.</p>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">cp single-nic-vlan-nncp.sample osp-ng-nncp-worker1.yaml</code></pre>
+</div>
+</div>
+</li>
+<li>
+<p>Edit the file for use with the relevant node.</p>
+<div class="paragraph">
+<p>Refer to the network configuration table you have created earlier.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">vi osp-ng-nncp-worker1.yaml</code></pre>
+</div>
+</div>
+</li>
+<li>
+<p>Customize the copy of sample configuration as per requirement.</p>
+<div class="olist loweralpha">
+<ol class="loweralpha" type="a">
+<li>
+<p>Change the metadata name to reflect the node name and interface name strings.</p>
+</li>
+<li>
+<p>Change the name of the interface as per the network configuration table.</p>
+</li>
+<li>
+<p>Change the vlan id as per your setup.</p>
+</li>
+<li>
+<p>Change the ipaddress of the interface as per the network configuration table.</p>
+</li>
+<li>
+<p>Repeat above steps for all network configuration blocks: internalapi, storage, tenant and interface configuration.</p>
+</li>
+<li>
+<p>Change the hostname under nodeselector to match your hostname.</p>
+</li>
+</ol>
+</div>
+</li>
+<li>
+<p>Apply the configuration</p>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">oc apply -f  osp-ng-nncp-worker1.yaml</code></pre>
+</div>
+</div>
+</li>
+<li>
+<p>Create copy of your current edited file for other nodes, it will be easier to edit.</p>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">cp osp-ng-nncp-worker1.yaml osp-ng-nncp-worker2.yaml
+cp osp-ng-nncp-worker1.yaml osp-ng-nncp-worker3.yaml</code></pre>
+</div>
+</div>
+</li>
+<li>
+<p>Edit the other files with relevant network configuration as per network configuration table.</p>
+</li>
+<li>
+<p>Most likely you will need to change only the metadata name, the ip addresses and nodeselector hostname configuration.</p>
+</li>
+<li>
+<p>Apply newly onfigured yamls indivdually:</p>
+<div class="listingblock execute">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">oc apply -f osp-ng-nncp-worker2.yaml
+oc apply -f osp-ng-nncp-worker3.yaml</code></pre>
+</div>
+</div>
+</li>
+<li>
+<p>Wait until they are in an available state before proceeding:</p>
+<div class="listingblock execute">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">oc get nncp -w</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">Sample Output</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">NAME                              STATUS      REASON
+osp-enp1s0-worker-ocp4-worker1    Available   SuccessfullyConfigured
+osp-enp1s0-worker-ocp4-worker2    Available   SuccessfullyConfigured
+osp-enp1s0-worker-ocp4-worker3    Available   SuccessfullyConfigured</code></pre>
+</div>
+</div>
+</li>
+<li>
+<p>Verify the network settings are applied on the relevant node by listing ip settings on the node.</p>
+<div class="olist loweralpha">
+<ol class="loweralpha" type="a">
+<li>
+<p>Connect to node:</p>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">oc debug node/ocp4-worker1.aio.example.com</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">Sample output</div>
+<div class="content">
+<pre>Temporary namespace openshift-debug-cp7xd is created for debugging node...
+Starting pod/ocp4-master1aioexamplecom-debug ...
+To use host binaries, run `chroot /host`
+Pod IP: 192.168.123.101
+If you don't see a command prompt, try pressing enter.
+sh-4.4#</pre>
+</div>
+</div>
+</li>
+<li>
+<p>Check IP address listing to verify the desired settings are applied.</p>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">ip address show</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">Sample output</div>
+<div class="content">
+<pre>. . .
+66: enp1s0.20@enp1s0: &lt;BROADCAST,MULTICAST,UP,LOWER_UP&gt; mtu 1500 qdisc noqueue state UP group default qlen 1000
+    link/ether de:ad:be:ef:00:01 brd ff:ff:ff:ff:ff:ff
+    inet 172.17.0.10/24 brd 172.17.0.255 scope global noprefixroute enp1s0.20
+       valid_lft forever preferred_lft forever
+67: enp1s0.21@enp1s0: &lt;BROADCAST,MULTICAST,UP,LOWER_UP&gt; mtu 1500 qdisc noqueue state UP group default qlen 1000
+    link/ether de:ad:be:ef:00:01 brd ff:ff:ff:ff:ff:ff
+    inet 172.18.0.10/24 brd 172.18.0.255 scope global noprefixroute enp1s0.21
+       valid_lft forever preferred_lft forever
+68: enp1s0.22@enp1s0: &lt;BROADCAST,MULTICAST,UP,LOWER_UP&gt; mtu 1500 qdisc noqueue state UP group default qlen 1000
+    link/ether de:ad:be:ef:00:01 brd ff:ff:ff:ff:ff:ff
+    inet 172.19.0.10/24 brd 172.19.0.255 scope global noprefixroute enp1s0.22
+. . .</pre>
+</div>
+</div>
+</li>
+</ol>
+</div>
+</li>
+</ol>
+</div>
+<nav class="pagination">
+  <span class="prev"><a href="section3.1.html">Preparing RHOCP for RHOSP Network Isolation</a></span>
+  <span class="next"><a href="section3.3.html">Configuring Network Attachment Definition</a></span>
+</nav>
+</article>
+  </div>
+</main>
+</div>
+<footer class="footer">
+  <img src="../../../_/img/rhl-logo-red.png" height="40px" alt="Red Hat"  href="https://redhat.com" >
+</footer><script id="site-script" src="../../../_/js/site.js" data-ui-root-path="../../../_"></script>
+<script async src="../../../_/js/vendor/highlight.js"></script>
+  </body>
+</html>

@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Verify OpenStack control plane configuration :: RHOSP18 - Provision Control Plane Services and Manage Data Plane Nodes</title>
+    <link rel="prev" href="section5.4.html">
+    <link rel="next" href="section6.html">
+    <meta name="generator" content="Antora 3.1.3">
+    <link rel="stylesheet" href="../../../_/css/site.css">
+    <script>var uiRootPath = '../../../_'</script>
+  </head>
+  <body class="article">
+<header class="header">
+  <nav class="navbar">
+    <div class="navbar-brand">
+      <a class="navbar-item" href="https://www.redhat.com" target="_blank"><img src="../../../_/img/redhat-logo.png" height="40px" alt="Red Hat"></a>
+      <a class="navbar-item" style="font-size: 24px; color: white" href="../../..">RHOSP18 - Provision Control Plane Services and Manage Data Plane Nodes</a>
+      <button class="navbar-burger" data-target="topbar-nav">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+    <div id="topbar-nav" class="navbar-menu">
+      <div class="navbar-end">
+        <a class="navbar-item" href="https://github.com/RedHatQuickCourses/changeme/issues" target="_blank">Report Issues</a>
+      </div>
+    </div>
+  </nav>
+</header><div class="body">
+<div class="nav-container" data-component="rhods-deploy" data-version="1.34">
+  <aside class="nav">
+    <div class="panels">
+<div class="nav-panel-menu is-active" data-panel="menu">
+  <nav class="nav-menu">
+    <h3 class="title"><a href="../index.html">RHOSP18 - Provision Control Plane Services and Manage Data Plane Nodes</a></h3>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="0">
+<ul class="nav-list">
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="../index.html">Home</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="0">
+<ul class="nav-list">
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="section1.html">Introduction</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="section1.1.html">Traditional TripleO deployment verses deployment with OpenShift cluster.</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="section1.2.html">RHOSO installation process overview</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="section1.3.html">RHOSO Installation Process in this Training</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="section1.4.html">Network Configuration in this Training</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="section2.1.html">Prerequisites for Installation</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="section2.2.html">About the Prerequisite Operators</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="section2.3.html">Install NMState Operator</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="section2.4.html">Install MetalLB Operator</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="section2.5.html">Install Cert-Manager Operator</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="section3.1.html">Preparing RHOCP for RHOSP Network Isolation</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="section3.2.html">Setting up Node Network Configuration Policy</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="section3.3.html">Configuring Network Attachment Definition</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="section3.4.html">Configure MetalLB IP Address Pools</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="section3.5.html">Setup MetalLB L2 Advertisement configuration</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="section4.html">Storage</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="section4.1.html">Configuring NFS storage</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="section4.2.html">Verify storage configuration</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="section5.html">Install control plane</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="section5.1.html">Configure the secrets</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="section5.2.html">Install the OpenStack Operator</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="section5.3.html">Create the OpenStack Control Plane</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="section5.4.html">Troubleshoot the OpenStack Control Plane</a>
+  </li>
+  <li class="nav-item is-current-page" data-depth="2">
+    <a class="nav-link" href="section5.5.html">Verify OpenStack control plane configuration</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="section6.html">Create data plane</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="section6.1.html">Create the Data Plane Network configuration</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="section6.2.html">Create the Data Plane VM</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="section6.3.html">Data Plane Deployment</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="section6.4.html">Troubleshoot the Data Plane deployment</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="section6.5.html">Verify data plane deployment</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="section9.html">Access OpenStack</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="section10.html">Express Install</a>
+  </li>
+</ul>
+  </li>
+</ul>
+  </nav>
+</div>
+<div class="nav-panel-explore" data-panel="explore">
+  <div class="context">
+    <span class="title">RHOSP18 - Provision Control Plane Services and Manage Data Plane Nodes</span>
+    <span class="version">1.34</span>
+  </div>
+  <ul class="components">
+    <li class="component is-current">
+      <a class="title" href="../index.html">RHOSP18 - Provision Control Plane Services and Manage Data Plane Nodes</a>
+      <ul class="versions">
+        <li class="version is-current is-latest">
+          <a href="../index.html">1.34</a>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</div>
+    </div>
+  </aside>
+</div>
+<main class="article">
+<div class="toolbar" role="navigation">
+<button class="nav-toggle"></button>
+  <a href="../index.html" class="home-link"></a>
+<nav class="breadcrumbs" aria-label="breadcrumbs">
+  <ul>
+    <li><a href="../index.html">RHOSP18 - Provision Control Plane Services and Manage Data Plane Nodes</a></li>
+    <li><a href="section5.html">Install control plane</a></li>
+    <li><a href="section5.5.html">Verify OpenStack control plane configuration</a></li>
+  </ul>
+</nav>
+</div>
+  <div class="content">
+<aside class="toc sidebar" data-title="Contents" data-levels="2">
+  <div class="toc-menu"></div>
+</aside>
+<article class="doc">
+<h1 class="page">Verify OpenStack control plane configuration</h1>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Verify that OpenStack control plane deployment is completed:</p>
+<div class="listingblock execute">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">oc get openstackcontrolplane -n openstack</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">Sample Output</div>
+<div class="content">
+<pre>NAME                                 STATUS   MESSAGE
+openstack-galera-network-isolation   True     Setup complete</pre>
+</div>
+</div>
+</li>
+<li>
+<p>List the pods generated by OpenStack control plane deployment in openstack namespace</p>
+<div class="listingblock execute">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">oc get pods -n openstack</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">Sample Output</div>
+<div class="content">
+<pre>NAME                           READY   STATUS      RESTARTS   AGE
+ceilometer-0                   3/3     Running     0          137m
+cinder-api-0                   2/2     Running     0          136m
+cinder-scheduler-0             2/2     Running     0          137m
+cinder-volume-nfs-0            2/2     Running     0          130m
+dnsmasq-dns-68cfcd59cd-fxkww   1/1     Running     0          53s
+glance-default-single-0        3/3     Running     0          129m
+keystone-cc54dd4d7-zv2w4       1/1     Running     0          137m
+keystone-cron-28587661-7qzgt   0/1     Completed   0          123m
+keystone-cron-28587721-mz8dm   0/1     Completed   0          63m
+keystone-cron-28587781-zs4fw   0/1     Completed   0          3m35s
+memcached-0                    1/1     Running     0          139m
+neutron-66c8988f65-xjfd7       2/2     Running     0          136m
+nova-api-0                     2/2     Running     0          135m
+nova-cell0-conductor-0         1/1     Running     0          136m
+nova-cell1-conductor-0         1/1     Running     0          135m
+nova-cell1-novncproxy-0        1/1     Running     0          136m
+nova-metadata-0                2/2     Running     0          135m
+nova-scheduler-0               1/1     Running     0          135m
+openstack-cell1-galera-0       1/1     Running     0          139m
+openstack-galera-0             1/1     Running     0          139m
+openstackclient                1/1     Running     0          137m
+ovn-controller-7dt6d           3/3     Running     0          139m
+ovn-controller-v47bm           3/3     Running     0          139m
+ovn-controller-xj6bg           3/3     Running     0          139m
+ovn-northd-59d8f84596-tkck6    1/1     Running     0          138m
+ovsdbserver-nb-0               1/1     Running     0          139m
+ovsdbserver-sb-0               1/1     Running     0          139m
+placement-fbdc9597b-f9bzm      2/2     Running     0          136m
+rabbitmq-cell1-server-0        1/1     Running     0          139m
+rabbitmq-server-0              1/1     Running     0          139m</pre>
+</div>
+</div>
+</li>
+<li>
+<p>Check the assignment of additional networks to the control plane service pods.</p>
+<div class="listingblock execute">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">for pod in `oc get pods -o custom-columns=POD:.metadata.name --no-headers`
+do
+echo -e "===== $pod ====="
+oc rsh $pod ip -4 addr
+done</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">Sample Output</div>
+<div class="content">
+<pre>__output trimmed to show relevant pods__
+
+===== cinder-volume-nfs-0 =====
+Defaulted container "cinder-volume" out of: cinder-volume, probe
+1: lo: &lt;LOOPBACK,UP,LOWER_UP&gt; mtu 65536 qdisc noqueue state UNKNOWN group default qlen 1000
+    inet 127.0.0.1/8 scope host lo
+       valid_lft forever preferred_lft forever
+Error: Peer netns reference is invalid.
+Error: Peer netns reference is invalid.
+3: eth0@if51: &lt;BROADCAST,MULTICAST,UP,LOWER_UP&gt; mtu 1450 qdisc noqueue state UP group default  link-netns 7425bf91-87ff-48d1-911b-a1ad273f604d
+    inet 10.131.0.41/23 brd 10.131.1.255 scope global eth0
+       valid_lft forever preferred_lft forever
+4: storage@if46: &lt;BROADCAST,MULTICAST,UP,LOWER_UP&gt; mtu 1500 qdisc noqueue state UP group default  link-netns 7425bf91-87ff-48d1-911b-a1ad273f604d
+    inet 172.18.0.31/24 brd 172.18.0.255 scope global storage
+       valid_lft forever preferred_lft forever
+
+===== glance-default-single-0 =====
+Defaulted container "glance-log" out of: glance-log, glance-httpd, glance-api
+1: lo: &lt;LOOPBACK,UP,LOWER_UP&gt; mtu 65536 qdisc noqueue state UNKNOWN group default qlen 1000
+    inet 127.0.0.1/8 scope host lo
+       valid_lft forever preferred_lft forever
+3: eth0@if70: &lt;BROADCAST,MULTICAST,UP,LOWER_UP&gt; mtu 1450 qdisc noqueue state UP group default  link-netnsid 0
+    inet 10.128.2.60/23 brd 10.128.3.255 scope global eth0
+       valid_lft forever preferred_lft forever
+4: storage@if50: &lt;BROADCAST,MULTICAST,UP,LOWER_UP&gt; mtu 1500 qdisc noqueue state UP group default  link-netnsid 0
+    inet 172.18.0.30/24 brd 172.18.0.255 scope global storage
+       valid_lft forever preferred_lft forever
+
+===== neutron-58b9454b9-mw26j =====
+Defaulted container "neutron-api" out of: neutron-api, neutron-httpd
+1: lo: &lt;LOOPBACK,UP,LOWER_UP&gt; mtu 65536 qdisc noqueue state UNKNOWN group default qlen 1000
+    inet 127.0.0.1/8 scope host lo
+       valid_lft forever preferred_lft forever
+3: eth0@if75: &lt;BROADCAST,MULTICAST,UP,LOWER_UP&gt; mtu 1450 qdisc noqueue state UP group default  link-netnsid 0
+    inet 10.128.2.65/23 brd 10.128.3.255 scope global eth0
+       valid_lft forever preferred_lft forever
+4: internalapi@if49: &lt;BROADCAST,MULTICAST,UP,LOWER_UP&gt; mtu 1500 qdisc noqueue state UP group default  link-netnsid 0
+    inet 172.17.0.33/24 brd 172.17.0.255 scope global internalapi
+       valid_lft forever preferred_lft forever
+
+===== ovn-controller-5zlqq =====
+Defaulted container "ovsdb-server" out of: ovsdb-server, ovs-vswitchd, ovn-controller
+1: lo: &lt;LOOPBACK,UP,LOWER_UP&gt; mtu 65536 qdisc noqueue state UNKNOWN group default qlen 1000
+    inet 127.0.0.1/8 scope host lo
+       valid_lft forever preferred_lft forever
+3: eth0@if48: &lt;BROADCAST,MULTICAST,UP,LOWER_UP&gt; mtu 1450 qdisc noqueue state UP group default  link-netnsid 0
+    inet 10.131.0.38/23 brd 10.131.1.255 scope global eth0
+       valid_lft forever preferred_lft forever
+4: tenant@if47: &lt;BROADCAST,MULTICAST,UP,LOWER_UP&gt; mtu 1500 qdisc noqueue state UP group default  link-netnsid 0
+    inet 172.19.0.30/24 brd 172.19.0.255 scope global tenant
+       valid_lft forever preferred_lft forever
+
+===== ovn-controller-l69ms =====
+Defaulted container "ovsdb-server" out of: ovsdb-server, ovs-vswitchd, ovn-controller
+1: lo: &lt;LOOPBACK,UP,LOWER_UP&gt; mtu 65536 qdisc noqueue state UNKNOWN group default qlen 1000
+    inet 127.0.0.1/8 scope host lo
+       valid_lft forever preferred_lft forever
+3: eth0@if54: &lt;BROADCAST,MULTICAST,UP,LOWER_UP&gt; mtu 1450 qdisc noqueue state UP group default  link-netnsid 0
+    inet 10.128.2.44/23 brd 10.128.3.255 scope global eth0
+       valid_lft forever preferred_lft forever
+4: tenant@if51: &lt;BROADCAST,MULTICAST,UP,LOWER_UP&gt; mtu 1500 qdisc noqueue state UP group default  link-netnsid 0
+    inet 172.19.0.31/24 brd 172.19.0.255 scope global tenant
+       valid_lft forever preferred_lft forever
+
+===== ovn-controller-l8q7x =====
+Defaulted container "ovsdb-server" out of: ovsdb-server, ovs-vswitchd, ovn-controller
+1: lo: &lt;LOOPBACK,UP,LOWER_UP&gt; mtu 65536 qdisc noqueue state UNKNOWN group default qlen 1000
+    inet 127.0.0.1/8 scope host lo
+       valid_lft forever preferred_lft forever
+3: eth0@if92: &lt;BROADCAST,MULTICAST,UP,LOWER_UP&gt; mtu 1450 qdisc noqueue state UP group default  link-netnsid 0
+    inet 10.129.2.82/23 brd 10.129.3.255 scope global eth0
+       valid_lft forever preferred_lft forever
+4: tenant@if80: &lt;BROADCAST,MULTICAST,UP,LOWER_UP&gt; mtu 1500 qdisc noqueue state UP group default  link-netnsid 0
+    inet 172.19.0.32/24 brd 172.19.0.255 scope global tenant
+       valid_lft forever preferred_lft forever
+
+===== ovn-northd-59d8f84596-hkfj5 =====
+1: lo: &lt;LOOPBACK,UP,LOWER_UP&gt; mtu 65536 qdisc noqueue state UNKNOWN group default qlen 1000
+    inet 127.0.0.1/8 scope host lo
+       valid_lft forever preferred_lft forever
+3: eth0@if58: &lt;BROADCAST,MULTICAST,UP,LOWER_UP&gt; mtu 1450 qdisc noqueue state UP group default  link-netnsid 0
+    inet 10.128.2.48/23 brd 10.128.3.255 scope global eth0
+       valid_lft forever preferred_lft forever
+4: internalapi@if49: &lt;BROADCAST,MULTICAST,UP,LOWER_UP&gt; mtu 1500 qdisc noqueue state UP group default  link-netnsid 0
+    inet 172.17.0.32/24 brd 172.17.0.255 scope global internalapi
+       valid_lft forever preferred_lft forever
+
+===== ovsdbserver-nb-0 =====
+1: lo: &lt;LOOPBACK,UP,LOWER_UP&gt; mtu 65536 qdisc noqueue state UNKNOWN group default qlen 1000
+    inet 127.0.0.1/8 scope host lo
+       valid_lft forever preferred_lft forever
+3: eth0@if94: &lt;BROADCAST,MULTICAST,UP,LOWER_UP&gt; mtu 1450 qdisc noqueue state UP group default  link-netnsid 0
+    inet 10.129.2.84/23 brd 10.129.3.255 scope global eth0
+       valid_lft forever preferred_lft forever
+4: internalapi@if78: &lt;BROADCAST,MULTICAST,UP,LOWER_UP&gt; mtu 1500 qdisc noqueue state UP group default  link-netnsid 0
+    inet 172.17.0.30/24 brd 172.17.0.255 scope global internalapi
+       valid_lft forever preferred_lft forever
+
+===== ovsdbserver-sb-0 =====
+1: lo: &lt;LOOPBACK,UP,LOWER_UP&gt; mtu 65536 qdisc noqueue state UNKNOWN group default qlen 1000
+    inet 127.0.0.1/8 scope host lo
+       valid_lft forever preferred_lft forever
+3: eth0@if96: &lt;BROADCAST,MULTICAST,UP,LOWER_UP&gt; mtu 1450 qdisc noqueue state UP group default  link-netnsid 0
+    inet 10.129.2.86/23 brd 10.129.3.255 scope global eth0
+       valid_lft forever preferred_lft forever
+4: internalapi@if78: &lt;BROADCAST,MULTICAST,UP,LOWER_UP&gt; mtu 1500 qdisc noqueue state UP group default  link-netnsid 0
+    inet 172.17.0.31/24 brd 172.17.0.255 scope global internalapi
+       valid_lft forever preferred_lft forever</pre>
+</div>
+</div>
+</li>
+<li>
+<p>At this stage you may create the OpenStack resources like users, projects, network, subnet, image, flavor, ect.</p>
+</li>
+</ol>
+</div>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-tip" title="Tip"></i>
+</td>
+<td class="content">
+You may try creating a few resources from the <strong>Access OpenStack</strong> page (till step #6) for further verification of your control plane deployment.
+Make sure not to create the instance as we are not done with the data plane setup yet.
+</td>
+</tr>
+</table>
+</div>
+<nav class="pagination">
+  <span class="prev"><a href="section5.4.html">Troubleshoot the OpenStack Control Plane</a></span>
+  <span class="next"><a href="section6.html">Create data plane</a></span>
+</nav>
+</article>
+  </div>
+</main>
+</div>
+<footer class="footer">
+  <img src="../../../_/img/rhl-logo-red.png" height="40px" alt="Red Hat"  href="https://redhat.com" >
+</footer><script id="site-script" src="../../../_/js/site.js" data-ui-root-path="../../../_"></script>
+<script async src="../../../_/js/vendor/highlight.js"></script>
+  </body>
+</html>
