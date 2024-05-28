@@ -1,0 +1,58 @@
+= Create the OpenStack Control Plane
+
+*Reference:* See https://access.redhat.com/documentation/en-us/red_hat_openstack_platform/18.0-dev-preview/html-single/deploying_red_hat_openstack_platform_18.0_development_preview_3_on_red_hat_openshift_container_platform/index#proc_creating-the-control-plane_controlplane[Setion 4.2. Creating the control plane
+] from RHOSP18.0-DP3 deployment guide. Use the https://github.com/openstack-k8s-operators/openstack-operator/blob/dev-preview3/config/samples/core_v1beta1_openstackcontrolplane_galera_network_isolation.yaml[Sample configuration file] from upstream repository.
+
+NOTE: In this deployment, the bastion has a preconfigured NFS service that we will be using to store glance images and cinder volumes.
+
+. Copy sample controlplane deployment configuration from upstream repository link mentioned above.
++
+*or*
++
+Use `ctlplane-deploy.sample` file.
+
+. Create a copy of sample configuration file.
++
+[source,bash]
+----
+cp ctlplane-deploy.sample osp-ng-ctlplane-deploy.yaml
+----
+
+. Edit the file with your preferred editor. 
++
+[source,bash]
+----
+vi osp-ng-ctlplane-deploy.yaml
+----
+
+. Change the configuration as per your setup.
+.. Change `storageClass` from `local-storage` to `ocs-storagecluster-ceph-rbd`
+.. Change the `metallb.universe.tf/loadBalancerIPs` to `172.22.0.89` (this sets external ip for dnsmasq service)
+.. Set the server ip from 192.168.122.1 to 192.168.123.100 (this reflects in /etc/dnsmasq.d/config.cfg file of dnsmasq-dns pod)
+.. Configure nfs cinder volume: Refer step #2 in https://access.redhat.com/documentation/en-us/red_hat_openstack_platform/18.0-dev-preview/html-single/deploying_red_hat_openstack_platform_18.0_development_preview_3_on_red_hat_openshift_container_platform/index#proc_alternative-cinder-configure-control-plane-for-nfs_ceph-back-end[9.1.2. Configuring the control plane to use the generic NFS driver]
+.. Configure customServiceConfig for glance: Refer step #2 in https://access.redhat.com/documentation/en-us/red_hat_openstack_platform/18.0-dev-preview/html-single/deploying_red_hat_openstack_platform_18.0_development_preview_3_on_red_hat_openshift_container_platform/index#assembly_alternative-storage-solutions-glance_ceph-back-end[9.2.1. Configuring the control plane Image service to use the Block Storage service]
+.. As we are not using object storage for this deployment, disable swift by setting `enabled: false` 
+.. You may delete the blocks for `barbican` and `designate` if not required.
+
+. Finally create the OpenStack control plane
++
+[source,bash,role=execute]
+----
+oc create -f osp-ng-ctlplane-deploy.yaml
+----
+
+. Wait until the OpenStack control plane deployment is completed:
++
+[source,bash,role=execute]
+----
+oc get openstackcontrolplane -n openstack
+----
++
+WARNING: This can take several minutes.
++
+To track the progress, you may utilize the following command, which will automatically terminate upon completion of the job.
++
+[source,bash,role=execute]
+----
+while ! (oc get openstackcontrolplane -n openstack -o custom-columns=Name:.metadata.name,Status:.status.conditions[0].message | grep 'Setup complete'); do oc get openstackcontrolplane -n openstack; sleep 30; done
+----

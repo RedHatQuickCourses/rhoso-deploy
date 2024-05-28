@@ -1,0 +1,145 @@
+= Install MetalLB Operator
+
+. Create the `MetalLB` Operator namespace:
++
+[source,bash,role=execute]
+----
+cat << EOF | oc apply -f -
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: metallb-system
+EOF
+----
+
+. Verify the namespace is created:
++
+[source,bash,role=execute]
+----
+oc get ns metallb-system  -o custom-columns=Name:.metadata.name,Status:.status.phase
+----
++
+.Sample output
++
+----
+Name             Status
+metallb-system   Active
+----
+
+. Create the OperatorGroup:
++
+[source,bash,role=execute]
+----
+cat << EOF | oc apply -f -
+apiVersion: operators.coreos.com/v1
+kind: OperatorGroup
+metadata:
+  name: metallb-operator
+  namespace: metallb-system
+EOF
+----
+
+. Confirm the OperatorGroup is installed in the namespace:
++
+[source,bash,role=execute]
+----
+oc get operatorgroup -n metallb-system
+----
++
+.Sample Output
++
+----
+NAME               AGE
+metallb-operator   5s
+----
+
+. Subscribe to the metallb Operator:
++
+[source,bash,role=execute]
+----
+cat << EOF| oc apply -f -
+apiVersion: operators.coreos.com/v1alpha1
+kind: Subscription
+metadata:
+  name: metallb-operator-sub
+  namespace: metallb-system
+spec:
+  channel: stable
+  name: metallb-operator
+  source: redhat-operators
+  sourceNamespace: openshift-marketplace
+EOF
+----
+
+. Confirm the metallb installplan is in the namespace:
++
+[source,bash,role=execute]
+----
+oc get installplan -n metallb-system
+----
+
+. Confirm the metallb operator is installed:
++
+[source,bash,role=execute]
+----
+oc get clusterserviceversion -n metallb-system -o custom-columns=Name:.metadata.name,Phase:.status.phase
+----
+
+. Repeat the query until the Phase is Succeeded.
++
+.Sample Output
+----
+Name                                    Phase
+metallb-operator.v4.13.0-202404030309   Succeeded
+----
++
+Track the progress using below command:
++
+[source,bash,role=execute]
+----
+while ! (oc get clusterserviceversion -n metallb-system -o custom-columns=Name:.metadata.name,Phase:.status.phase | grep metallb-operator | grep Succeeded); do oc get clusterserviceversion -n metallb-system; sleep 5; done
+----
+
+. Create a single instance of a metallb resource:
++
+[source,bash,role=execute]
+----
+cat << EOF | oc apply -f -
+apiVersion: metallb.io/v1beta1
+kind: MetalLB
+metadata:
+  name: metallb
+  namespace: metallb-system
+EOF
+----
+
+. Verify that the deployment for the controller is running:
++
+[source,bash,role=execute]
+----
+oc get deployment -n metallb-system controller
+----
+
+. Repeat the command until AVAILABLE is 1
++
+.Sample Output
+----
+NAME         READY   UP-TO-DATE   AVAILABLE   AGE
+controller   1/1     1            1           21s
+----
+
+. Verify that the daemon set for the speaker is running:
++
+[source,bash,role=execute]
+----
+oc get daemonset -n metallb-system speaker
+----
++
+.Sample Output
+----
+oc get daemonset -n metallb-system speaker
+NAME      DESIRED   CURRENT   READY   UP-TO-DATE   AVAILABLE   NODE SELECTOR            AGE
+speaker   6         6         6       6            6           kubernetes.io/os=linux   55s
+----
+
+*Reference:* see https://access.redhat.com/documentation/en-us/openshift_container_platform/4.12/html/networking/load-balancing-with-metallb#metallb-operator-install[Installing the MetalLB Operator] in the RHOCP Networking guide

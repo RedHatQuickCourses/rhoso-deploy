@@ -1,0 +1,37 @@
+= Express Install
+
+IMPORTANT: This is not the recommended way of deployment for the purpose of this training.
+The deployment scripts provided here are ment to work only on this specific demo lab environment.
+
+*Note:*
+
+* The scripts are to be executed in the mentioned sequence below. 
+* The script will make use of pre-configured files for the deployment.
+* Make sure you execute the specific script on the mentioned node.
+* For execution of the scripts on the other nodes than bastion:
+** Create the script file on that node with the requreid content and execute the script.
++
+*or*
++
+** Just cat the script on bastion node and copy-paste the commands from there in the relevant node.
+
+*Follow below steps for Express Install:*
+
+. Login to the bastion node as root and clone the `rhoso-deploy-files` repo if you have not already cloned it.
++
+----
+git clone https://github.com/RedHatQuickCourses/rhoso-deploy-files.git
+cd rhoso-deploy-files
+----
+
+. Go to the directory of pre-configured files and execute the first script form the scripts, directory.
++
+----
+../scripts/1.sh
+----
+
+. Run the second script `2.sh` on the hypervisor node as root user.
+. Login to newly created compute node as root user to execute the third script `3.sh` on it.
+. Login again to the bastion node as root user to exeute the fourth script `4.sh` on it.
+. Finally access `openstackclient` pod's shell to execute content of the fifth script `5.sh` from there.
+

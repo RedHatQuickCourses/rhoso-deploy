@@ -1,0 +1,47 @@
+# Verify storage configuration
+
+. Verify storage class for `nfs` is available:
++
+[source,bash]
+----
+ oc get storageclass | grep nfs
+----
++
+.Sample output
+----
+ nfs                                     kubernetes.io/no-provisioner            Delete          Immediate              false                  36m
+----
+
+. Check the NFS Physical Volumes:
++
+[source,bash]
+----
+ oc get pv | grep nfs
+----
++
+.Sample output
+----
+nfs-pv1                                    100Gi      RWO,RWX        Delete           Available                                                        nfs                                    36m
+nfs-pv10                                   100Gi      RWO,RWX        Delete           Available                                                        nfs                                    36m
+nfs-pv2                                    100Gi      RWO,RWX        Delete           Available                                                        nfs                                    36m
+nfs-pv3                                    100Gi      RWO,RWX        Delete           Available                                                        nfs                                    36m
+nfs-pv4                                    100Gi      RWO,RWX        Delete           Available                                                        nfs                                    36m
+nfs-pv5                                    100Gi      RWO,RWX        Delete           Available                                                        nfs                                    36m
+nfs-pv6                                    100Gi      RWO,RWX        Delete           Available                                                        nfs                                    36m
+nfs-pv7                                    100Gi      RWO,RWX        Delete           Available                                                        nfs                                    36m
+nfs-pv8                                    100Gi      RWO,RWX        Delete           Available                                                        nfs                                    36m
+nfs-pv9                                    100Gi      RWO,RWX        Delete           Available                                                        nfs                                    36m
+----
+
+. List the secrets created for storage:
++
+[source,bash]
+----
+oc get secrets | grep cinder
+----
++
+.Sample output
+----
+cinder-nfs-config                                    Opaque                                1      37m
+glance-cinder-config                                 Opaque                                1      37m
+----

@@ -1,0 +1,12 @@
+=  Prerequisites for Installation
+
+Some prerequisites needed to install Red Hat OpenStack Services on OpenShift (RHOSO) are already included in the lab environment such as:
+
+* An operational OpenShift cluster which supports Multus CNI
+* `oc` command line tool on your bastion (workstation host)
+* `podman` command line tool on your bastion (workstation host)
+* Access to repositories which contain the Dev Preview code
+* Access to an existing registry or create a local Quay registry
+* The YAML files required for deployment are made available in this lab for your convenience.
+
+Reference: https://access.redhat.com/documentation/en-us/red_hat_openstack_platform/18.0-dev-preview/html-single/deploying_red_hat_openstack_platform_18.0_development_preview_3_on_red_hat_openshift_container_platform/index#prerequisites[Deploying RHOSP18.0-DP3 prerequisites]

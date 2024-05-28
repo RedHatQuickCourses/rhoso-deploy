@@ -1,0 +1,95 @@
+= Configure the secrets
+
+
+Follow below steps for configuring secrets for the installation of Openstack Operator on RHOCP cluster.
+
+. Prepare the secret for installating the operators:
++
+Login with your Red Hat account and create a secret:
++
+[source,bash]
+----
+podman login --username "My-RH-username" --password "My-Password" registry.redhat.io --authfile auth.json
+----
++
+NOTE: You need to replace *My-RH-username* and *My-Password* strings in the above command with the apporpriate value.
+
+. Ensure that you observe the `Login Succeeded!` message in the output of the preceding command, then confirm the creation of the `auth.json` file.
++
+[source,bash]
+----
+cat auth.json
+----
+
+. Create secret for the registry:
++
+[source,bash]
+----
+oc create secret generic osp-operators-secret \
+ -n openstack-operators \
+ --from-file=.dockerconfigjson=auth.json \
+ --type=kubernetes.io/dockerconfigjson
+----
+
+. Veify the secret is created:
++
+[source,bash]
+----
+oc get secrets -n openstack-operators osp-operators-secret
+----
++
+.Sample Output
+----
+NAME                   TYPE                             DATA   AGE
+osp-operators-secret   kubernetes.io/dockerconfigjson   1      10s
+----
+
+
+. Copy sample config from step #2 of section https://access.redhat.com/documentation/en-us/red_hat_openstack_platform/18.0-dev-preview/html-single/deploying_red_hat_openstack_platform_18.0_development_preview_3_on_red_hat_openshift_container_platform/index#proc_providing-secure-access-to-the-RHOSP-services_preparing[3.2. Providing secure access to the Red Hat OpenStack Platform services] of deployment guide.
++
+or
++
+Use ctlplane-secret.sample file.
+
+. Create a copy of sample config to configure secret for openstack services.
++
+[source,bash]
+----
+cp ctlplane-secret.sample osp-ng-ctlplane-secret.yaml
+----
+
+. Generate base64 password string for your desired password.
++
+You may change the string `password` in the below command with your desired password.
++
+[source,bash]
+----
+echo -n password | base64
+----
++
+.Sample output
+----
+cGFzc3dvcmQ=
+----
+
+. Replace your base64 password string in the ctlplane secret file.
++
+[source,bash]
+----
+sed -i 's/<base64_password>/cGFzc3dvcmQ=/g' osp-ng-ctlplane-secret.yaml
+sed -i 's/<base64_password_heat>/cGFzc3dvcmQ=/g' osp-ng-ctlplane-secret.yaml
+----
+
+. Create the Secret:
++
+[source,bash,role=execute]
+----
+oc create -f osp-ng-ctlplane-secret.yaml
+----
+
+. Verify the *Secret* was created:
++
+[source,bash,role=execute]
+----
+oc describe secret osp-secret -n openstack
+----

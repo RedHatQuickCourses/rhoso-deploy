@@ -1,59 +1,7 @@
-= Verify data plane deployment
-
-. Track the deployment process by observing logs.
-
-. You can view the Ansible logs while the deployment executes:
-+
-[source,bash,role=execute]
-----
-oc logs -l app=openstackansibleee -f --max-log-requests 10
-----
-+
-.Sample Output
-----
-(...)
-PLAY RECAP *********************************************************************
-edpm-compute-0             : ok=53   changed=26   unreachable=0    failed=0    skipped=54   rescued=0    ignored=0
-----
-+
-Press Ctrl-C to exit.
-
-. Check the status of Openstack data plane Deployment.
-+
-[source,bash,role=execute]
-----
-oc get openstackdataplanedeployment
-----
-
-. Repeat the query until you see the following:
-+
-.Sample Output
-----
-NAME                  STATUS   MESSAGE
-openstack-edpm-ipam   True     Setup Complete
-----
-
-. Check the status of Openstack data plane Nodeset deployment.
-+
-[source,bash,role=execute]
-----
-oc get openstackdataplanenodeset
-----
-
-. Repeat the query until you see the following:
-+
-.Sample Output
-----
-NAME                  STATUS   MESSAGE
-openstack-edpm-ipam   True     NodeSet Ready
-----
-
-FIXME: review below steps till end.
+= Troubleshoot the Data Plane deployment
 
 **Troubleshooting data plane deployment:**
 
-Pre-configured YAML files suitable for the lab environment are provided with this training.
-However, you may face any issue with the deployment. 
 Follow below steps to track the progress with the data plane deployment and troubleshoot it.
 
 . Check the status of the deployment, it is in progress.
@@ -87,7 +35,7 @@ oc get jobs
 NAME                                 COMPLETIONS   DURATION   AGE
 bootstrap-openstack-edpm-ipam        1/1           103s       2m27s
 cinder-db-purge-28585441             1/1           34s        11h
->> download-cache-openstack-edpm-ipam   0/1           43s        43s << 
+>> download-cache-openstack-edpm-ipam   0/1           43s        43s <<
 glance-purge-cron-28585441           1/1           17s        11h
 keystone-cron-28585981               1/1           25s        155m
 keystone-cron-28586041               1/1           27s        95m
@@ -154,7 +102,39 @@ oc delete -f osp-ng-dataplane-deployment.yaml
 oc delete -f osp-ng-dataplane-node-set-deploy.yaml
 ----
 
-. Re-run the deployment:
+. You may need to restore the compute node depending on where the deployment is failing.
++
+Run below command as `root` user from `hyperviosr`:
++
+[source,bash,role=execute]
+----
+virsh snapshot-revert --domain osp-compute0 preprovisioned 
+----
++
+.Sample output
+----
+[root@hypervisor ~]# virsh snapshot-revert --domain osp-compute0 preprovisioned 
+----
+
+. Wait for a few minutes and then make sure you are able to connect to the compute node from the hypervisor
++
+[source,bash,role=execute]
+----
+ssh root@172.22.0.100
+----
++
+.Sample output
+----
+[root@hypervisor ~]# ssh root@172.22.0.100
+Activate the web console with: systemctl enable --now cockpit.socket
+
+Register this system with Red Hat Insights: insights-client --register
+Create an account or view all your systems at https://red.ht/insights-dashboard
+Last login: Mon May 27 22:49:50 2024 from 172.22.0.254
+[root@edpm-compute-0 ~]# 
+----
+
+. Go back to the bastion VM as root user and re-run the deployment:
 +
 [source,bash,role=execute]
 ----

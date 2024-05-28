@@ -1,40 +1,21 @@
-= Create the Data Plane
+= Create the Data Plane VM
 
-Using a preconfigured yaml file(*files/osp-ng-dataplane-netconfig.yaml*) we will configure the topology for each data plane network.
+In this lab we are going to use pre-provisioned compute node for deployment of dataplane. 
 
-. Change directory to the files:
-+
-[source,bash,role=execute]
-----
-cd ~/labrepo/content/files
-----
+Follow the steps on this page to create a pre-provisioned compute node for use with dataplane deployment.
 
-. Apply the *network confguration*:
-+
-[source,bash,role=execute]
-----
-oc apply -f osp-ng-dataplane-netconfig.yaml
-----
 
-. *Create VM for data plane*
-
-.. Log out from the bastion so that we go back to the hypervisor machine:
-+
-[source,bash,role=execute]
-----
-logout
-----
+. Make sure you are accessing *hypervisor* host as *root* user. 
 +
 .Sample Output
 ----
-[lab-user@hypervisor ~]#
+[root@hypervisor ~]#
 ----
 
-.. Create the *RHEL compute* on lab-user (*hypervisor*) server:
+. Run below commands to create the *RHEL compute* on the *hypervisor* server:
 +
 [source,bash,role=execute]
 ----
-sudo -i
 cd /var/lib/libvirt/images
 wget http://opentraining-na100.ole.redhat.com/downloads/images/rhel9-3.qcow2
 cp rhel9-3.qcow2 rhel9-guest.qcow2
@@ -51,8 +32,10 @@ qemu-img create -f qcow2 -F qcow2 -b /var/lib/libvirt/images/rhel9-guest.qcow2 /
 virt-install --virt-type kvm --ram 16384 --vcpus 4 --cpu=host-passthrough --os-variant rhel8.4 --disk path=/var/lib/libvirt/images/osp-compute-0.qcow2,device=disk,bus=virtio,format=qcow2 --network network:ocp4-provisioning --network network:ocp4-net --boot hd,network --noautoconsole --vnc --name osp-compute0 --noreboot
 virsh start osp-compute0
 ----
++
+NOTE: RHEL9.3 qcow2 image is made available for your convenience. Ideally you will be dowloading the image from customer portal.
 
-.. Login to the Compute and Verify IP from 192.168.123.0/24
+. Check for the IP of compute node from `192.168.123.0/24` network.
 +
 [source,bash,role=execute]
 ----
@@ -81,18 +64,17 @@ Every 2.0s: virsh domifaddr osp-compute0 --source agent                         
 virsh domifaddr osp-compute0 --source agent
 ----
 
-.. Use the IP assigned to `eth1` above in the next step.
+. Use the IP assigned to `eth1` above in the next step.
 
-.. Configure Ethernet Devices on New Compute
+. SSH to the new VM (no password required) to configure Ethernet Devices on the new Compute.
 
-.. SSH to the new VM, no password required.
 +
 [source,bash,role=execute]
 ----
 ssh root@192.168.123.61
 ----
 
-.. Setup the compute server network for static IP in `172.22.0/24` and `192.168.123.0/24` subnets respectively for `eth0` and `eth1` interfaces.
+. Setup the compute server network for static IP in `172.22.0.0/24` and `192.168.123.0/24` subnets for `eth0` and `eth1` interfaces respectively.
 +
 [source,bash,role=execute]
 ----
@@ -104,28 +86,28 @@ nmcli con add con-name "static-eth1" ifname eth1 type ethernet ip4 192.168.123.6
 nmcli con up "static-eth1"
 ----
 
-.. Log off VM
+. Log off VM
 +
 [source,bash,role=execute]
 ----
 logout
 ----
 
-.. Log into the compute server via `172.22.0/24` network.
+. Log into the compute server via `172.22.0.0/24` network.
 +
 [source,bash,role=execute]
 ----
 ssh root@172.22.0.100
 ----
 
-.. Set hostname
+. Set hostname
 +
 [source,bash,role=execute]
 ----
 sudo hostnamectl set-hostname edpm-compute-0.aio.example.com
 ----
 
-.. Subscribe to the RHEL 9.3 Repos with Validated Account
+. Subscribe the compute node to the RHEL9.3 repositories and RHOSP18 development preview channel on satellite. 
 +
 [source,bash,role=execute]
 ----
@@ -138,14 +120,22 @@ sudo subscription-manager repos --disable=*
 subscription-manager repos --enable=rhceph-6-tools-for-rhel-9-x86_64-rpms --enable=rhel-9-for-x86_64-baseos-rpms --enable=rhel-9-for-x86_64-appstream-rpms --enable=rhel-9-for-x86_64-highavailability-rpms --enable=openstack-dev-preview-for-rhel-9-x86_64-rpms --enable=fast-datapath-for-rhel-9-x86_64-rpms
 ----
 
-.. Install podman on the compute and login to registries
+. Install podman on the compute.
 +
 [source,bash,role=execute]
 ----
-sudo dnf install -y podman
+dnf install -y podman
 ----
 
-.. Log off the Compute Server
+podman login registry.redhat.io
+
+
+[root@edpm-compute-0 ~]# podman login registry.redhat.io
+Username: rhn-support-ashishks
+Password: 
+Login Succeeded!
+
+. Log off the Compute Server
 +
 [source,bash,role=execute]
 ----
@@ -163,49 +153,8 @@ virsh snapshot-create-as osp-compute0 preprovisioned
 +
 [source,bash,role=execute]
 ----
-scp /root/.ssh/id_rsa root@192.168.123.100:/root/.ssh/id_rsa_compute
-scp /root/.ssh/id_rsa.pub root@192.168.123.100:/root/.ssh/id_rsa_compute.pub
+scp -o StrictHostKeyChecking=accept-new /root/.ssh/id_rsa root@192.168.123.100:/root/.ssh/id_rsa_compute
+scp -o StrictHostKeyChecking=accept-new /root/.ssh/id_rsa.pub root@192.168.123.100:/root/.ssh/id_rsa_compute.pub
 ----
-
-WARNING: This might error initially because of unknown hosts file.
-Retry to make sure both files are copied.
 
 NOTE: We had copied the id_rsa.pub key form hypervisor to compute VM while creating the VM in earlier steps on this page.
-
-. Connect to the *bastion* server with password `redhat`
-+
-[source,bash,role=execute]
-----
-ssh root@192.168.123.100
-----
-+
-.Sample Output
-----
-[root@ocp4-bastion ~] #
-----
-
-. Change to Lab Repo
-+
-[source,bash,role=execute]
-----
-cd ~/labrepo/content/files
-----
-
-. Create Secret
-+
-[source,bash,role=execute]
-----
-oc create secret generic dataplane-ansible-ssh-private-key-secret --save-config --dry-run=client --from-file=authorized_keys=/root/.ssh/id_rsa_compute.pub --from-file=ssh-privatekey=/root/.ssh/id_rsa_compute --from-file=ssh-publickey=/root/.ssh/id_rsa_compute.pub -n openstack -o yaml | oc apply -f-
-ssh-keygen -f ./id -t ecdsa-sha2-nistp521 -N ''
-oc create secret generic nova-migration-ssh-key --from-file=ssh-privatekey=id --from-file=ssh-publickey=id.pub -n openstack -o yaml | oc apply -f-
-----
-
-. Deploy the data plane
-+
-[source,bash,role=execute]
-----
-oc apply -f osp-ng-dataplane-node-set-deploy.yaml
-oc apply -f osp-ng-dataplane-deployment.yaml
-----
-
-. The data plane deployment takes several minutes, go to next page for steps to track the progress of your deployment.

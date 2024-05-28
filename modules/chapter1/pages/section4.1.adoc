@@ -1,0 +1,115 @@
+= Configuring NFS storage
+
+Reference: See section https://access.redhat.com/documentation/en-us/red_hat_openstack_platform/18.0-dev-preview/html-single/deploying_red_hat_openstack_platform_18.0_development_preview_3_on_red_hat_openshift_container_platform/index#assembly_alternative-storage-solutions-cinder_ceph-back-end[9.1. Configuring the Block Storage service with a generic NFS back end] from Deploying Red Hat OpenStack Platform 18.0 Development Preview 3 on Red Hat OpenShift Container Platform guide.
+
+. Create an NFS share for cinder
++
+[source,bash,role=execute]
+----
+mkdir /nfs/cinder
+chmod 777 /nfs/cinder
+----
+
+. Create directories for NFS persistent volumes.
++
+[source,bash,role=execute]
+----
+mkdir /nfs/pv6
+mkdir /nfs/pv7
+mkdir /nfs/pv8
+mkdir /nfs/pv9
+mkdir /nfs/pv10
+mkdir /nfs/pv11
+chmod 777 /nfs/pv*
+----
+
+
+. Configure NFS storage class
+.. Use below sample configuration to create nfs sorage class:
++
+[source,bash,role=execute]
+----
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+   name: nfs
+provisioner: kubernetes.io/no-provisioner
+reclaimPolicy: Delete
+----
+
+.. Use below sample configuration to create persistent volume of type NFS
++
+[source,bash,role=execute]
+----
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: nfs-pv1
+spec:
+  accessModes:
+  - ReadWriteOnce
+  - ReadWriteMany
+  capacity:
+    storage: 100Gi
+  nfs:
+    path: /nfs/pv1
+    server: 192.168.123.100
+  persistentVolumeReclaimPolicy: Delete
+  storageClassName: nfs
+  volumeMode: Filesystem
+----
+.. Create copies of the above block for PersistentVolume.
+.. Use the simila block for creating different physicle volumes.
+.. Change the name and the path accordingly.
+.. You may add your configuration for creation of nfs StorageClass and PersistentVolumes in one file.
++
+[source,bash,role=execute]
+----
+vi nfs-storage.yaml
+----
+
+. Apply the nfs storage configuration.
++
+[source,bash,role=execute]
+----
+oc apply -f nfs-storage.yaml
+----
+
+Reference: 9.1.1. Creating the NFS server connection secret
+
+. Prepare the nfs cinder configuration file as below:
++
+[source,bash,role=execute]
+----
+cat >> nfs-cinder-conf << EOF
+[nfs]
+nas_host=192.168.123.100
+nas_share_path=/nfs/cinder
+EOF
+----
+
+. Prepare the secret to place the NFS server connection used by Cinder.
++
+[source,bash,role=execute]
+----
+oc create secret generic cinder-nfs-config --from-file=nfs-cinder-conf
+----
+
+. Prepare the glance configuration file as below:
++
+[source,bash,role=execute]
+----
+cat >> glance-conf << EOF
+[default_backend]
+cinder_store_user_name = glance
+cinder_store_password = openstack
+cinder_store_project_name = service[root@ocp4-bastion demo-lab]# 
+EOF
+----
+
+. Prepare the secret to place the server connection used by Glance.
++
+[source,bash,role=execute]
+----
+oc create secret generic glance-cinder-config --from-file=glance-conf
+----

@@ -1,0 +1,50 @@
+= Create the Data Plane Network configuration
+
+Reference: https://access.redhat.com/documentation/en-us/red_hat_openstack_platform/18.0-dev-preview/html-single/deploying_red_hat_openstack_platform_18.0_development_preview_3_on_red_hat_openshift_container_platform/index#proc_configuring-the-data-plane-network_preparing[3.5. Configuring the data plane network]
+
+. Copy the OpenStack dataplane network configuration from step number 2 and 3.
++
+or
++
+Use dataplane-netconfig.sample file.
+
+. Create a copy of sample config to install openstack operator.
++
+[source,bash]
+----
+cp dataplane-netconfig.sample osp-ng-dataplane-netconfig.yaml
+----
+
+. Edit the file with your preferred editor. 
++
+[source,bash]
+----
+vi osp-ng-dataplane-netconfig.yaml
+----
+
+. Referring to network configuration table, edit your dataplane network configuration file.
+.. Change the dnsDomain as pre requirement.
+.. Change the allocation rages for the ctlplane network.
+.. Change the allocation ranges for external network.
+.. Remove the configuration block for the StorageMgmt network.
+
+. Apply the *network confguration*:
++
+[source,bash,role=execute]
+----
+oc apply -f osp-ng-dataplane-netconfig.yaml
+----
+
+. Log out from the bastion so that we go back to the hypervisor machine and then swith to root on the hypervisor machine.
++
+[source,bash,role=execute]
+----
+logout
+sudo su -
+----
++
+.Sample Output
+----
+[lab-user@hypervisor ~]$
+[root@hypervisor ~]#
+----

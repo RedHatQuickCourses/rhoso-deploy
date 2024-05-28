@@ -1,0 +1,17 @@
+= Preparing RHOCP for RHOSP Network Isolation
+
+Network confiuration for the nodes is facilated by the below operators.
+
+*NMState operator* _facilitates network configuration for the nodes of the cluster._
+`NodeNetworkConfigurationPolicy` offered by nmstate operator allows you to configure network settings on individual nodes in a network. 
+This policy can be used to set network interfaces, routing tables, firewall rules, and other network-related settings. 
+
+*Multus CNI plugin* _facilitates the network configuration for the pods running control plane services for the cluster._
+`NetworkAttachmentDefinition` (NAD) is a feature offered by the Multus CNI (Container Network Interface) plugin. 
+NAD is used to define network attachment points and states for network devices, allowing for automatic fencing and management of those devices. 
+
+*MetalLB operator* _offers load blaancing service for OCP baremetal cluster._
+`IPAddressPool` and `L2Advertisement` CRs offered by MetalLB operator facilitates IP advertisement from specified pools, ensuring efficient IP allocation to services and namespaces. 
+By leveraging these custom resources, OpenShift facilitates efficient communication between nodes within the cluster, promoting seamless integration and performance optimization in networking-intensive environments.
+
+

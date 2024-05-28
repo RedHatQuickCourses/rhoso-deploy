@@ -27,9 +27,5 @@ Deployment of Red Hat OpenStack 18.0 introduces the concept of OpenStack service
 This deployment method utilizes Red Hat OpenShift cluster for the deployment and management of Red Hat OpenStack.
 RHOSP Director and Control nodes are completely eleminated from this deployment. 
 RHOCP takes care of hosting the services required for Control node and it also manages the deployment of the compute nodes.
-
-FIXME: review and re-write the above explanation if required.
-   
+ 
 image::new-rhoso-arch.png[]
-
-FIXME: curate above image

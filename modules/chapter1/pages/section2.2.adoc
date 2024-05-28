@@ -1,0 +1,45 @@
+= About the Prerequisite Operators
+
+There are three operators that are required to be installed before you can install the `OpenStack Operator`, the `NMState Operator` the `MetalLB Operator` and the `Cert-Manager Operator`
+
+=== NMState Operator:
+
+The Openshift NMState Operator acts as a configuration engine for NetworkManager. 
+Nmstate simplifies network configuration tasks by providing a declarative API for managing network settings, allowing users to define network setups using YAML or JSON. 
+It supports physical servers deployed with OpenShift and virtualized environments, enabling the creation of bonds, bridges, VLAN interfaces, and more through encapsulated configurations. 
+These configurations can be combined into single files for consistent setups across nodes. 
+We will be utilizing this operator for configuration of OpenStack network isolation on the nodes.
+
+=== MetalLB Oerator:
+
+MetalLB is a load balancer solution for Kubernetes clusters. 
+In the current use case of OSP services deployment on OCP cluster, the MetalLB operator manages the deployment via CRDs, like `IPAddressPool` and `L2Advertisement`. 
+This implementation of MetalLB operates in layer2 mode. It requires IP address pools for load balancer services, configurable via IPAddressPool CR. 
+L2Advertisement CR facilitates IP advertisement from specified pools, ensuring efficient IP allocation to services and namespaces.
+
+=== Cert-manager Oerator:
+
+The cert-manager Operator for Red Hat OpenShift is a cluster-wide service that provides application certificate lifecycle management. 
+It allows you to integrate with external certificate authorities and provides certificate provisioning, renewal, and retirement.
+
+== Install the Prerequisite Operators
+
+Access your cluster on Workstation or Bastion node where you have access to `oc` CLI and perform the following steps.
+
+Make sure you can reach out to the OpenShift cluster, for instance, by listing the nodes in your cluster:
+
+[source,bash,role=execute]
+----
+oc get nodes
+----
+
+.Sample output
+----
+NAME                           STATUS   ROLES                  AGE   VERSION
+ocp4-master1.aio.example.com   Ready    control-plane,master   26h   v1.25.16+9946c63
+ocp4-master2.aio.example.com   Ready    control-plane,master   26h   v1.25.16+9946c63
+ocp4-master3.aio.example.com   Ready    control-plane,master   26h   v1.25.16+9946c63
+ocp4-worker1.aio.example.com   Ready    worker                 25h   v1.25.16+9946c63
+ocp4-worker2.aio.example.com   Ready    worker                 25h   v1.25.16+9946c63
+ocp4-worker3.aio.example.com   Ready    worker                 25h   v1.25.16+9946c63
+----

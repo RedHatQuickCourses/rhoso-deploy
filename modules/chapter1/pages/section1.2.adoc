@@ -1,0 +1,3 @@
+= RHOSO installation process overview
+
+image::rhoso-infographics.png[]

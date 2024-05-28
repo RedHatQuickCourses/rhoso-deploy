@@ -1,0 +1,114 @@
+= Install Cert-Manager Operator
+
+. Create the cert-manager-operator Operator namespace:
++
+[source,bash,role=execute]
+----
+cat << EOF | oc apply -f -
+apiVersion: v1
+kind: Namespace
+metadata:
+    name: cert-manager-operator
+    labels:
+      pod-security.kubernetes.io/enforce: privileged
+      security.openshift.io/scc.podSecurityLabelSync: "false"
+EOF
+----
+
+. Create the OperatorGroup:
++
+[source,bash,role=execute]
+----
+cat << EOF | oc apply -f -
+apiVersion: operators.coreos.com/v1
+kind: OperatorGroup
+metadata:
+  name: cert-manager-operator
+  namespace: cert-manager-operator
+spec:
+  targetNamespaces:
+  - cert-manager-operator
+  upgradeStrategy: Default
+EOF
+----
+
+. Confirm the OperatorGroup is installed in the namespace:
++
+[source,bash,role=execute]
+----
+oc get operatorgroup -n cert-manager-operator
+----
+
+. Subscribe to the cert-manager Operator:
++
+[source,bash,role=execute]
+----
+cat << EOF | oc apply -f -
+apiVersion: operators.coreos.com/v1alpha1
+kind: Subscription
+metadata:
+  labels:
+    operators.coreos.com/openshift-cert-manager-operator.cert-manager-operator: ""
+  name: openshift-cert-manager-operator
+  namespace: cert-manager-operator
+spec:
+  channel: stable-v1.12
+  installPlanApproval: Automatic
+  name: openshift-cert-manager-operator
+  source: redhat-operators
+  sourceNamespace: openshift-marketplace
+  startingCSV: cert-manager-operator.v1.12.1
+EOF
+----
+
+. Confirm the cert-manager installplan is in the namespace:
++
+[source,bash,role=execute]
+----
+oc get installplan -n cert-manager-operator
+----
++
+.Sample Output
+----
+NAME            CSV                             APPROVAL    APPROVED
+install-sw9rh   cert-manager-operator.v1.12.1   Automatic   true
+----
+
+. Confirm the cert-manager operator is installed:
++
+[source,bash,role=execute]
+----
+oc get clusterserviceversion -n cert-manager-operator -o custom-columns=Name:.metadata.name,Phase:.status.phase
+----
++
+.Sample Output
+----
+Name                                    Phase
+cert-manager-operator.v1.12.1           Succeeded
+----
++
+Track the progress using below command:
++
+[source,bash,role=execute]
+----
+while ! (oc get clusterserviceversion -n cert-manager-operator -o custom-columns=Name:.metadata.name,Phase:.status.phase | grep cert-manager-operator | grep Succeeded); do oc get clusterserviceversion -n cert-manager-operator; sleep 5; done
+----
+
+. Verify that cert-manager pods are up and running by entering the following command:
++
+[source,bash,role=execute]
+----
+oc get pods -n cert-manager
+----
+
+. Repeat command until all pods are showing READY 1/1
++
+.Sample Output
+----
+NAME                                      READY   STATUS    RESTARTS   AGE
+cert-manager-68744bfbf4-pgx8h             1/1     Running   0          102s
+cert-manager-cainjector-5df47878b-zn6kk   1/1     Running   0          2m19s
+cert-manager-webhook-66c75fcddf-z66qg     1/1     Running   0          2m21s
+----
+
+*Reference:* see https://access.redhat.com/documentation/en-us/openshift_container_platform/4.14/html/security_and_compliance/cert-manager-operator-for-red-hat-openshift[cert-manager Operator for Red Hat OpenShift] in the RHOCP Security and compliance guide.

@@ -1,0 +1,90 @@
+= Network Configuration in this Training
+
+Please refer to the following table for the network configuration utilized in this deployment:
+
+[cols="1,1,1,1,1,1,1"]
+|===
+|Network name | VLAN | CIDR	| NetConfig allocation | Range	MetalLB IPAddressPool range	| nad ipam range | OCP worker nncp range
+
+| ctlplane
+| n/a
+| 172.22.0.0/24
+| 172.22.0.100 - 172.22.0.120
+| 172.22.0.80-172.22.0.90
+| 172.22.0.30 - 172.22.0.70
+| 172.22.0.10 - 172.22.0.20
+
+| internalapi
+| 20
+| 172.17.0.0/24
+| 172.17.0.100 - 172.17.0.250
+| 172.17.0.80-172.17.0.90
+| 172.17.0.30 - 172.17.0.70
+| 172.17.0.10 - 172.17.0.20
+
+| storage
+| 21
+| 172.18.0.0/24
+| 172.18.0.100 - 172.18.0.250
+| 172.18.0.80-172.18.0.90
+| 172.18.0.30 - 172.18.0.70
+| 172.18.0.10 - 172.18.0.20
+
+| tenant
+| 22
+| 172.19.0.0/24
+| 172.19.0.100 - 172.19.0.250
+| 172.19.0.80-172.19.0.90
+| 172.19.0.30 - 172.19.0.70
+| 172.19.0.10 - 172.19.0.20
+
+| external
+| n/a
+| 192.168.123.0/24
+| 192.168.123.61 - 192.168.123.90
+| 192.168.122.80 - 192.168.122.90
+| 192.168.123.60 - 192.168.123.110
+|  
+
+|===
+
+
+We will create the required configuration files from scratch by referring to the sample configuration provided in the product documentation:
+
+https://access.redhat.com/documentation/en-us/red_hat_openstack_platform/18.0-dev-preview/html-single/deploying_red_hat_openstack_platform_18.0_development_preview_3_on_red_hat_openshift_container_platform/index#doc-wrapper[Deploying Red Hat OpenStack Platform 18.0 Development Preview 3 on Red Hat OpenShift Container Platform]
+
+
+- Login to the `bastion` node as `root` user and clone the repository.
++
+[source,bash,role=execute]
+----
+git clone https://github.com/RedHatQuickCourses/rhoso-deploy-files.git
+cd rhoso-deploy-files
+----
++
+.Sample output
+----
+[root@ocp4-bastion ~]# git clone https://github.com/RedHatQuickCourses/rhoso-deploy-files.git
+Cloning into 'rhoso-deploy-files'...
+remote: Enumerating objects: 41, done.
+remote: Counting objects: 100% (41/41), done.
+remote: Compressing objects: 100% (31/31), done.
+remote: Total 41 (delta 8), reused 38 (delta 8), pack-reused 0
+Receiving objects: 100% (41/41), 13.69 KiB | 3.42 MiB/s, done.
+Resolving deltas: 100% (8/8), done.
+[root@ocp4-bastion ~]# cd rhoso-deploy-files
+[root@ocp4-bastion rhoso-deploy-files]# 
+[root@ocp4-bastion rhoso-deploy-files]# ls
+pre-configured  README.md  sample  scripts
+[root@ocp4-bastion rhoso-deploy-files]# 
+----
+
+- Sample configuration files from the product documentation are available with the extension `\*.sample`.
+- Preconfigured YAML files, named with the prefix `osp-ng-*` are also available in the Git repository.
+
+- The sample YAML files are included for your convenience and preconfigured YAML files are made available for reference.
+- It is recommended to create your own YAML files using the sample configuration from the product documentation.
+
+- You may use the provided sample configuration in the lab to avoid copy-pasting from the documentation and refer to the preconfigured files for reference as needed.
+
+NOTE: For deployments in other environments, consider creating a table listing the necessary network isolation and their corresponding IP/subnet ranges to streamline the process.

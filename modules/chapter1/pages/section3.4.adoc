@@ -1,0 +1,45 @@
+= Configure MetalLB IP Address Pools
+
+. Copy sample configuration for the MetalLB IP address pools configuration from the same documentation url (step #12)
++
+*or*
++
+Use `single-nic-vlan-metallb-address-pools.sample` file.
+
+. Create a copy of sample config to create MetalLB IP Address Pools configuration file.
++
+[source,bash]
+----
+cp single-nic-vlan-metallb-address-pools.sample osp-ng-metal-lb-ip-address-pools.yaml
+----
+
+. Edit the file for use with your preferred editor. 
++
+[source,bash]
+----
+vi osp-ng-metal-lb-ip-address-pools.yaml
+----
+
+. Make sure ip address ranges are as pre desired configuration form the network configuration table.
+. Apply the configuration in osp-ng-metal-lb-ip-address-pools.yaml file
++
+[source,bash,role=execute]
+----
+oc apply -f osp-ng-metal-lb-ip-address-pools.yaml
+----
+
+. Verify the metallb ip address pools using below command:
++
+[source,bash,role=execute]
+----
+oc get ipaddresspools.metallb.io -n metallb-system 
+----
++
+.Sample Output
+----
+NAME          AUTO ASSIGN   AVOID BUGGY IPS   ADDRESSES
+ctlplane      true          false             ["172.22.0.80-172.22.0.90"]
+internalapi   true          false             ["172.17.0.80-172.17.0.90"]
+storage       true          false             ["172.18.0.80-172.18.0.90"]
+tenant        true          false             ["172.19.0.80-172.19.0.90"]
+----

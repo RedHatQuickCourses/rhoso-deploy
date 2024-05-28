@@ -1,3 +1,6 @@
 = Appendix A
 
-Content for Appendix A...
+* Product Documentation: https://access.redhat.com/documentation/en-us/red_hat_openstack_platform/18.0-dev-preview/html-single/deploying_red_hat_openstack_platform_18.0_development_preview_3_on_red_hat_openshift_container_platform/index#doc-wrapper[Deploying Red Hat OpenStack Platform 18.0 Development Preview 3 on Red Hat OpenShift Container Platform]
+
+* https://github.com/rh-osp-demo/dp-demo/tree/main[Git Repository] created by PM and TMM
+

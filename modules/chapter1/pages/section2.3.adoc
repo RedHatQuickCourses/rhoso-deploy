@@ -1,0 +1,135 @@
+= Install NMState Operator
+
+. Create the nmstate Operator namespace:
++
+[source,bash,role=execute]
+----
+cat << EOF | oc apply -f -
+apiVersion: v1
+kind: Namespace
+metadata:
+  labels:
+    kubernetes.io/metadata.name: openshift-nmstate
+    name: openshift-nmstate
+  name: openshift-nmstate
+spec:
+  finalizers:
+  - kubernetes
+EOF
+----
+
+. Verify the namespace is created:
++
+[source,bash,role=execute]
+----
+oc get ns openshift-nmstate  -o custom-columns=Name:.metadata.name,Status:.status.phase
+----
++
+.Sample output
++
+----
+Name                Status
+openshift-nmstate   Active
+----
+
+. Create the OperatorGroup:
++
+[source,bash,role=execute]
+----
+cat << EOF | oc apply -f -
+apiVersion: operators.coreos.com/v1
+kind: OperatorGroup
+metadata:
+  annotations:
+    olm.providedAPIs: NMState.v1.nmstate.io
+  name: openshift-nmstate
+  namespace: openshift-nmstate
+spec:
+  targetNamespaces:
+  - openshift-nmstate
+EOF
+----
+
+. Confirm the OperatorGroup is installed in the namespace:
++
+[source,bash,role=execute]
+----
+oc get operatorgroup -n openshift-nmstate
+----
++
+.Sample output
++
+----
+NAME                AGE
+openshift-nmstate   5s
+----
+
+. Subscribe to the nmstate Operator:
++
+[source,bash,role=execute]
+----
+cat << EOF| oc apply -f -
+apiVersion: operators.coreos.com/v1alpha1
+kind: Subscription
+metadata:
+  labels:
+    operators.coreos.com/kubernetes-nmstate-operator.openshift-nmstate: ""
+  name: kubernetes-nmstate-operator
+  namespace: openshift-nmstate
+spec:
+  channel: stable
+  installPlanApproval: Automatic
+  name: kubernetes-nmstate-operator
+  source: redhat-operators
+  sourceNamespace: openshift-marketplace
+EOF
+----
+
+. Confirm that NMstate operator is running. Repeat this command until you see the desired output:
++
+[source,bash,role=execute]
+----
+oc get clusterserviceversion -n openshift-nmstate  -o custom-columns=Name:.metadata.name,Phase:.status.phase
+----
++
+.Sample output
++
+----
+Name                                              Phase
+kubernetes-nmstate-operator.4.13.0-202402211707   Succeeded
+----
++
+Use below command to track the progress:
++
+[source,bash,role=execute]
+----
+while ! (oc get clusterserviceversion -n openshift-nmstate  -o custom-columns=Name:.metadata.name,Phase:.status.phase | grep kubernetes-nmstate-operator | grep Succeeded); do oc get clusterserviceversion -n openshift-nmstate; sleep 2; done
+----
+
+. Create instance of the nmstate operator:
++
+[source,bash,role=execute]
+----
+cat << EOF | oc apply -f -
+apiVersion: nmstate.io/v1
+kind: NMState
+metadata:
+  name: nmstate
+EOF
+----
+
+. Confirm that the instance for the nmstate operator is created:
++
+[source,bash,role=execute]
+----
+oc get nmstates
+----
++
+.Sample output
++
+----
+NAME      AGE
+nmstate   2s
+----
+
+*Reference:* see https://access.redhat.com/documentation/en-us/openshift_container_platform/4.12/html/networking/kubernetes-nmstate#k8s-nmstate-about-the-k8s-nmstate-operator[Installing the Kubernetes NMState Operator] in the RHOCP Networking guide

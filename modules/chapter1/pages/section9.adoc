@@ -18,13 +18,14 @@ openstack compute service list
 +
 .Sample Output
 ----
-+--------------------------------------+----------------+------------------------+----------+---------+-------+----------------------------+
-| ID                                   | Binary         | Host                   | Zone     | Status  | State | Updated At                 |
-+--------------------------------------+----------------+------------------------+----------+---------+-------+----------------------------+
-| 9d95d098-7666-4be8-8c70-230f474b625b | nova-conductor | nova-cell1-conductor-0 | internal | enabled | up    | 2024-04-17T18:58:07.000000 |
-| d283fd97-657c-422f-9572-be71c6a5b804 | nova-conductor | nova-cell0-conductor-0 | internal | enabled | up    | 2024-04-17T18:58:05.000000 |
-| 3abb8a21-1b8d-48f2-adfc-663d52344229 | nova-scheduler | nova-scheduler-0       | internal | enabled | up    | 2024-04-17T18:58:10.000000 |
-+--------------------------------------+----------------+------------------------+----------+---------+-------+----------------------------+
++--------------------------------------+----------------+--------------------------------+----------+---------+-------+----------------------------+
+| ID                                   | Binary         | Host                           | Zone     | Status  | State | Updated At                 |
++--------------------------------------+----------------+--------------------------------+----------+---------+-------+----------------------------+
+| 8c787286-4ef0-486d-90bc-a99b423fedb4 | nova-scheduler | nova-scheduler-0               | internal | enabled | up    | 2024-05-24T08:56:03.000000 |
+| 70cd6e5c-5fae-4641-8693-f0616c1a287b | nova-conductor | nova-cell0-conductor-0         | internal | enabled | up    | 2024-05-24T08:56:09.000000 |
+| 8c708776-539a-4fd8-8e67-61711e07e800 | nova-conductor | nova-cell1-conductor-0         | internal | enabled | up    | 2024-05-24T08:56:02.000000 |
+| a43ed3dc-a274-49e3-8956-2e80c8269bba | nova-compute   | edpm-compute-0.aio.example.com | nova     | enabled | up    | 2024-05-24T08:56:07.000000 |
++--------------------------------------+----------------+--------------------------------+----------+---------+-------+----------------------------+
 ----
 
 . Verify OpenStack networks:
@@ -37,14 +38,15 @@ exit
 +
 .Sample Output
 ----
-+--------------------------------------+------------------------------+--------------------------------+-------------------+-------+-------+----------------+
-| ID                                   | Agent Type                   | Host                           | Availability Zone | Alive | State | Binary         |
-+--------------------------------------+------------------------------+--------------------------------+-------------------+-------+-------+----------------+
-| 7a0966e9-e6ef-49f3-ba9e-e16d2c96f0b3 | OVN Controller Gateway agent | ocp4-worker3.aio.example.com   |                   | :-)   | UP    | ovn-controller |
-| 696925cf-518f-410c-bb0d-cd1cdc753393 | OVN Controller Gateway agent | ocp4-worker1.aio.example.com   |                   | :-)   | UP    | ovn-controller |
-| 881583db-0ef8-425f-afe8-d2eaef68bc32 | OVN Controller Gateway agent | ocp4-worker2.aio.example.com   |                   | :-)   | UP    | ovn-controller |
-| 0cc63eb1-f7c9-482d-8a1f-80e9bcbc62e5 | OVN Controller agent         | edpm-compute-0.aio.example.com |                   | :-)   | UP    | ovn-controller |
-+--------------------------------------+------------------------------+--------------------------------+-------------------+-------+-------+----------------+
++--------------------------------------+------------------------------+--------------------------------+-------------------+-------+-------+----------------------------+
+| ID                                   | Agent Type                   | Host                           | Availability Zone | Alive | State | Binary                     |
++--------------------------------------+------------------------------+--------------------------------+-------------------+-------+-------+----------------------------+
+| 4d89ad82-485c-41a2-9427-2420ee0129ec | OVN Controller Gateway agent | ocp4-worker1.aio.example.com   |                   | :-)   | UP    | ovn-controller             |
+| bfbc013b-5e2d-4454-8b11-63cb63ebef16 | OVN Controller Gateway agent | ocp4-worker2.aio.example.com   |                   | :-)   | UP    | ovn-controller             |
+| 6b17396e-1129-4b39-953c-b3735e401743 | OVN Controller Gateway agent | ocp4-worker3.aio.example.com   |                   | :-)   | UP    | ovn-controller             |
+| c9d07b3c-5889-4fdf-bc27-19dd197d6a32 | OVN Controller agent         | edpm-compute-0.aio.example.com |                   | :-)   | UP    | ovn-controller             |
+| d2bf2749-5744-5e96-b3fc-fb2708e8fb30 | OVN Metadata agent           | edpm-compute-0.aio.example.com |                   | :-)   | UP    | neutron-ovn-metadata-agent |
++--------------------------------------+------------------------------+--------------------------------+-------------------+-------+-------+----------------------------+
 ----
 
 . Map the Compute nodes to the Compute cell that they are connected to:
@@ -53,7 +55,19 @@ exit
 ----
 oc rsh nova-cell0-conductor-0 nova-manage cell_v2 discover_hosts --verbose
 ----
-FIXME: Explain significance of the above step
++
+.Sample Output
+----
+Modules with known eventlet monkey patching issues were imported prior to eventlet monkey patching: urllib3. This warning can usually be ignored if the caller is only importing and not executing nova code.
+2024-05-24 18:06:57.493 4576 WARNING oslo_policy.policy [None req-69d81d0b-1e8a-4cdb-9f08-19767ca33c21 - - - - - -] JSON formatted policy_file support is deprecated since Victoria release. You need to use YAML format which will be default in future. You can use ``oslopolicy-convert-json-to-yaml`` tool to convert existing JSON-formatted policy file to YAML-formatted in backward compatible way: https://docs.openstack.org/oslo.policy/latest/cli/oslopolicy-convert-json-to-yaml.html.
+2024-05-24 18:06:57.493 4576 WARNING oslo_policy.policy [None req-69d81d0b-1e8a-4cdb-9f08-19767ca33c21 - - - - - -] JSON formatted policy_file support is deprecated since Victoria release. You need to use YAML format which will be default in future. You can use ``oslopolicy-convert-json-to-yaml`` tool to convert existing JSON-formatted policy file to YAML-formatted in backward compatible way: https://docs.openstack.org/oslo.policy/latest/cli/oslopolicy-convert-json-to-yaml.html.
+Found 2 cell mappings.
+Skipping cell0 since it does not contain hosts.
+Getting computes from cell 'cell1': e35f1b96-fc8d-4b4d-8d47-24f3a0d38bbc
+Checking host mapping for compute host 'edpm-compute-0.aio.example.com': ffc784cb-f1e2-4a9f-850f-c865214d3edd
+Creating host mapping for compute host 'edpm-compute-0.aio.example.com': ffc784cb-f1e2-4a9f-850f-c865214d3edd
+Found 1 unmapped computes in cell: e35f1b96-fc8d-4b4d-8d47-24f3a0d38bbc
+----
 
 . Create a VM
 +

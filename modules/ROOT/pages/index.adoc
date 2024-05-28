@@ -1,7 +1,18 @@
 = RHOSP18 - Provision Control Plane Services and Manage Data Plane Nodes
 :navtitle: Home
 
-Welcome to this quick course on the _Provision Control Plane Services and Manage Data Plane Nodes in RHOSP18_.
+Welcome to this quick course on _Provision Control Plane Services and Manage Data Plane Nodes in RHOSP18_. 
+
+Red Hat OpenStack Services on OpenShift (RHOSO) is the next generation of Red Hat OpenStack Platform.
+Click https://www.redhat.com/en/blog/red-hat-openstack-services-openshift-next-generation-red-hat-openstack-platform[here] for more information.
+
+This course provides step-by-step instructions for deploying a Red Hat OpenStack Platform 18 cluster. 
+
+The course includes a hands-on lab with a pre-deployed Red Hat OpenShift Container Platform (RHOCP) cluster. 
+You will deploy Red Hat OpenStack control plane services on top of the RHOCP cluster. 
+Additionally, this training covers the steps to provision a pre-deployed compute node that acts as the data plane of your RHOSP deployment. 
+You will attach the pre-deployed compute node to the RHOSP18 control plane running on the OCP cluster.
+
 
 == Authors
 
@@ -16,8 +27,6 @@ The PTL team acknowledges the valuable contributions of the following Red Hat as
 Continue using the https://demo.redhat.com/catalog?item=babylon-catalog-prod/community-content.com-nextgen-osp.prod&utm_source=webapp&utm_medium=share-link[Red Hat OpenStack Services on OpenShift Dev Preview Demo] lab for hands-on activity for this course.
 
 NOTE: The catalog may take approximately 2 hours to get provisioned.
-
-FIXME: Make sure the demo lab stays for long time. Create it's copy under PERT or use ROLE lab if required.
 
 == Prerequisites
 

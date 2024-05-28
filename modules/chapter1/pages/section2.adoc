@@ -1,4 +1,4 @@
-= Perform Prerequisite Operations
+= DELETE Perform Prerequisite Operations
 
 == Prerequisites for Installation
 
@@ -32,7 +32,8 @@ L2Advertisement CR facilitates IP advertisement from specified pools, ensuring e
 
 === Cert-manager Oerator:
 
-FIXME: Explanation of cert-manager operator in context of RHOSP deployment in this lab.
+The cert-manager Operator for Red Hat OpenShift is a cluster-wide service that provides application certificate lifecycle management. 
+This allows you to integrate with external certificate authorities and provides certificate provisioning, renewal, and retirement.
 
 == Install the Prerequisite Operators
 

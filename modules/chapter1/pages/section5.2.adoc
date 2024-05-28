@@ -1,0 +1,99 @@
+= Install the OpenStack Operator
+
+
+Follow below steps for installation of Openstack Operator on RHOCP cluster.
+
+*Reference:* See https://access.redhat.com/documentation/en-us/red_hat_openstack_platform/18.0-dev-preview/html-single/deploying_red_hat_openstack_platform_18.0_development_preview_3_on_red_hat_openshift_container_platform/index#proc_installing-the-OpenStack-Operator_installing[Section 2.2. Installing the OpenStack Operator] from RHOSP18.0-DP3 deployment guide.
+
+. Copy the OpenStack Operator configuration for **Catalog Source, OperatorGroup and Subscription** from step number 8,9,10 respectively.
++
+or
++
+Use openstack-operator.sample file.
+
+. Create a copy of sample config to install openstack operator.
++
+[source,bash]
+----
+cp openstack-operator.sample osp-ng-openstack-operator.yaml
+----
+
+. Edit the file for use with your preferred editor. 
++
+[source,bash]
+----
+vi osp-ng-openstack-operator.yaml
+----
+
+. Change the `image` string for the CatalogSource to the below url:
++
+[source,bash]
+----
+quay.io/redhat_emp1/osp-on-ocp-lb1374-dp3-index:latest
+----
++
+NOTE: This custom catalog source is required until RHOSP18 is released.
+
+.Sample output
+----
+  #image: <your_registry>[:<port>]/rhosp-dev-preview/openstack-operator-index:0.1.3
+  image: quay.io/redhat_emp1/osp-on-ocp-lb1374-dp3-index:latest
+----
+
+. Configure the Catalog Source, OperatorGroup and Subscription for the OpenStack Operator
++
+[source,bash]
+----
+oc apply -f osp-ng-openstack-operator.yaml
+----
+
+. Confirm that you have installed the Openstack Operator, *openstack-operator.openstack-operators*:
++
+[source,bash]
+----
+oc get operators openstack-operator.openstack-operators
+----
+
+. Review the pods in the **openstack-operators** namespace:
++
+[source,bash]
+----
+oc get pods -n openstack-operators
+----
+
+. If you run:
++
+[source, bash]
+----
+oc get pods -n openstack-operators --sort-by=.metadata.creationTimestamp
+----
++
+You should see a list of completed pods and then the running openstack services pods.
+It should look like:
++
+.Sample Output
+----
+NAME                                                              READY   STATUS      RESTARTS   AGE
+(...)
+openstack-operator-index-89nv9                                    1/1     Running     0          7m30s
+
+neutron-operator-controller-manager-5755996c4b-ctbf8              2/2     Running     0          7m19s
+openstack-ansibleee-operator-controller-manager-6d7d77fc45pdtfj   2/2     Running     0          7m13s
+openstack-operator-controller-manager-56fb74ccb7-r8lvn            2/2     Running     0          7m1s
+dataplane-operator-controller-manager-6844bfd645-f2zvs            2/2     Running     0          7m1s
+glance-operator-controller-manager-596b56cd5-rvfrm                2/2     Running     0          6m59s
+swift-operator-controller-manager-df5fbbbc5-zscc5                 2/2     Running     0          6m49s
+octavia-operator-controller-manager-6549bc8f-r6xbp                2/2     Running     0          6m42s
+openstack-baremetal-operator-controller-manager-7cd655c4c7f5glm   2/2     Running     0          6m42s
+barbican-operator-controller-manager-69b766c996-ldg4n             2/2     Running     0          6m28s
+(...)
+----
++
+Wait to see all the *Running* pods in *READY* state.
++
+To track the progress, you may utilize the following command, which will automatically terminate upon completion of the job.
++
+[source, bash]
+----
+while ! (oc get pods -n openstack-operators | grep -v STATUS | grep -v Running | grep -v Completed | wc -l | grep 0); do sleep 10; done
+----

@@ -1,4 +1,10 @@
-= RHOSO installation process overview
+= Introduction
 
-image::rhoso-infographics.png[]
-FIXME: TBD curate above graphical representation of RHOSO deployment
+Red Hat OpenStack Platform (RHOSP) is an infrastructure-as-a-service product offered by Red Hat. 
+Until version 17.1, Red Hat OpenStack deployment utilized the TripleO project ("OpenStack On OpenStack"). 
+However, the current Red Hat OpenStack product differs from both the community OpenStack and previous releases of Red Hat OpenStack Platform.
+
+With RHOSP version 18, we are moving away from TripleO deployment and introducing Red Hat OpenStack Services on OpenShift (RHOSO). Now, the deployment of OpenStack is managed using a Red Hat OpenShift Container Platform (RHOCP) cluster. All control plane services are now containerized and run on the OpenShift Container Platform cluster.
+
+In this training, we will follow step-by-step instructions to deploy RHOSP 18 using a pre-existing OpenShift Container Platform cluster.
+

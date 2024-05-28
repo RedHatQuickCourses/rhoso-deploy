@@ -1,0 +1,46 @@
+= Setup MetalLB L2 Advertisement configuration
+
+. Copy sample L2Advertisement configuration for MetalLB from the same documentation url (step #16)
++
+*or*
++
+Use `single-nic-vlan-metallb-l2-advertisements.sample` file.
+
+. Create a copy of sample config to create MetalLB L2 Advertisement configuration file.
++
+[source,bash]
+----
+cp single-nic-vlan-metallb-l2-advertisements.sample osp-ng-metallb-l2-advertisements.yaml
+----
+
+. Edit the file for use with your preferred editor. 
++
+[source,bash]
+----
+vi osp-ng-metallb-l2-advertisements.yaml
+----
+
+. Change the configuration as per your setup. You may just need to chance the interface names as per the network configuration table.
+
+. Lastly, configure a *L2Advertisement* resource which will define which node advertises a service to the local network which has been preconfigured for your lab environment:
++
+[source,bash,role=execute]
+----
+oc apply -f osp-ng-metallb-l2-advertisements.yaml
+----
+
+. Verify the configuration:
++
+[source,bash,role=execute]
+----
+oc get l2advertisements.metallb.io -n metallb-system 
+----
++
+.Sample output
+----
+NAME          IPADDRESSPOOLS    IPADDRESSPOOL SELECTORS   INTERFACES
+ctlplane      ["ctlplane"]                                ["enp1s0"]
+internalapi   ["internalapi"]                             ["enp1s0.20"]
+storage       ["storage"]                                 ["enp1s0.21"]
+tenant        ["tenant"]                                  ["enp1s0.22"]
+----
