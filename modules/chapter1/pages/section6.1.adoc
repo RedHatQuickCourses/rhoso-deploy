@@ -24,7 +24,7 @@ vi osp-ng-dataplane-netconfig.yaml
 
 . Referring to network configuration table, edit your dataplane network configuration file.
 .. Change the dnsDomain as pre requirement.
-.. Change the allocation rages for the ctlplane network.
+.. Change the allocation ranges for the ctlplane network.
 .. Change the allocation ranges for external network.
 .. Remove the configuration block for the StorageMgmt network.
 

@@ -1,10 +1,10 @@
 = RHOSO Installation Process in this Training
 
-In this specific training, the lab deployment can be executed in three distinct methods:  
+In this specific training, the lab deployment can be executed by three distinct methods:  
 
 == 1. The Hard Way (Recommended)
 - Obtain sample files from the product documentation and upstream repositories.
-- The files with `*.sample` extension are mde available in the repositor for your convenience.
+- The files with `*.sample` extension are made available in the repositor for your convenience.
 - Customize the sample configuration to suit the lab environment.
 
 == 2. Easy Way (Use this if you are stuck)
@@ -16,4 +16,4 @@ In this specific training, the lab deployment can be executed in three distinct 
 - Use the provided scripts for quick deployment.
 - Ensure to run the scripts in the recommended sequence.
 - Execute the scripts on the recommended hosts.
-- Use this only if you need the setup qickly deployed for use with any other purpose.
+- Use this only if you need the setup quickly deployed for use with any other purpose.

@@ -12,7 +12,7 @@ Login with your Red Hat account and create a secret:
 podman login --username "My-RH-username" --password "My-Password" registry.redhat.io --authfile auth.json
 ----
 +
-NOTE: You need to replace *My-RH-username* and *My-Password* strings in the above command with the apporpriate value.
+NOTE: You need to replace *My-RH-username* and *My-Password* strings in the above command with the appropriate value.
 
 . Ensure that you observe the `Login Succeeded!` message in the output of the preceding command, then confirm the creation of the `auth.json` file.
 +
@@ -31,7 +31,7 @@ oc create secret generic osp-operators-secret \
  --type=kubernetes.io/dockerconfigjson
 ----
 
-. Veify the secret is created:
+. Veify that the secret is created:
 +
 [source,bash]
 ----
@@ -87,7 +87,7 @@ sed -i 's/<base64_password_heat>/cGFzc3dvcmQ=/g' osp-ng-ctlplane-secret.yaml
 oc create -f osp-ng-ctlplane-secret.yaml
 ----
 
-. Verify the *Secret* was created:
+. Verify that the *Secret* was created:
 +
 [source,bash,role=execute]
 ----

@@ -53,7 +53,7 @@ oc logs jobs/download-cache-openstack-edpm-ipam -f
 
 **Troubleshooting networking on compute node:**
 
-Netwroking setup of the data plane deployment could be error prone while you are tweaking your YAML files.
+Networking setup of the data plane deployment could be error prone while you are tweaking your YAML files.
 You may loose the connectivity of the compute node due to any misconfiguration in the files.
 You may need to tweak the data plane network configuration files for appropriate networking setup (os-net-config) on the compute node.
 
