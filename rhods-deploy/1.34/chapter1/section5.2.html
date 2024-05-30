@@ -327,7 +327,7 @@ barbican-operator-controller-manager-69b766c996-ldg4n             2/2     Runnin
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">while ! (oc get pods -n openstack-operators | grep -v STATUS | grep -v Running | grep -v Completed | wc -l | grep 0); do sleep 10; done</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">while ! (oc get pods -n openstack-operators | grep -v STATUS | grep -v Running | grep -v Completed | wc -l | grep 0); do oc get pods -n openstack-operators | grep -v Running | grep -v Completed; sleep 10; done</code></pre>
 </div>
 </div>
 </li>

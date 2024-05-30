@@ -353,37 +353,40 @@ subscription-manager repos --enable=rhceph-6-tools-for-rhel-9-x86_64-rpms --enab
 </div>
 </div>
 </li>
+<li>
+<p>Login to <code>registry.redhat.io</code></p>
+<div class="listingblock execute">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">podman login registry.redhat.io</code></pre>
+</div>
+</div>
+</li>
 </ol>
 </div>
-<div class="paragraph">
-<p>podman login registry.redhat.io</p>
-</div>
-<div class="paragraph">
-<p>[root@edpm-compute-0 ~]# podman login registry.redhat.io
+<div class="listingblock">
+<div class="content">
+<pre>[root@edpm-compute-0 ~]# podman login registry.redhat.io
 Username: rhn-support-ashishks
 Password:
-Login Succeeded!</p>
+Login Succeeded!</pre>
+</div>
 </div>
 <div class="olist arabic">
 <ol class="arabic">
 <li>
-<p>Log off the Compute Server</p>
+<p>Log off from the Compute Server.</p>
 <div class="listingblock execute">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">logout</code></pre>
 </div>
 </div>
-<div class="olist loweralpha">
-<ol class="loweralpha" type="a">
+</li>
 <li>
 <p>Snapshot the Compute Server</p>
 <div class="listingblock execute">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">virsh snapshot-create-as osp-compute0 preprovisioned</code></pre>
 </div>
-</div>
-</li>
-</ol>
 </div>
 </li>
 <li>
