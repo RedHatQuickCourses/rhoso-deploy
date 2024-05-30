@@ -95,5 +95,5 @@ To track the progress, you may utilize the following command, which will automat
 +
 [source, bash]
 ----
-while ! (oc get pods -n openstack-operators | grep -v STATUS | grep -v Running | grep -v Completed | wc -l | grep 0); do sleep 10; done
+while ! (oc get pods -n openstack-operators | grep -v STATUS | grep -v Running | grep -v Completed | wc -l | grep 0); do oc get pods -n openstack-operators | grep -v Running | grep -v Completed; sleep 10; done
 ----

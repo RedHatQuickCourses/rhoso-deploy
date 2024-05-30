@@ -127,22 +127,28 @@ subscription-manager repos --enable=rhceph-6-tools-for-rhel-9-x86_64-rpms --enab
 dnf install -y podman
 ----
 
+. Login to `registry.redhat.io`
++
+[source,bash,role=execute]
+----
 podman login registry.redhat.io
-
-
+----
+.Sample output
+----
 [root@edpm-compute-0 ~]# podman login registry.redhat.io
 Username: rhn-support-ashishks
 Password: 
 Login Succeeded!
+----
 
-. Log off the Compute Server
+. Log off from the Compute Server.
 +
 [source,bash,role=execute]
 ----
 logout
 ----
 
-.. Snapshot the Compute Server
+. Snapshot the Compute Server
 +
 [source,bash,role=execute]
 ----

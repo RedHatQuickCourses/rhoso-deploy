@@ -2,8 +2,6 @@
 
 *Rederence:* See https://access.redhat.com/documentation/en-us/red_hat_openstack_platform/18.0-dev-preview/html-single/deploying_red_hat_openstack_platform_18.0_development_preview_3_on_red_hat_openshift_container_platform/index#proc_preparing-RHOCP-for-RHOSP-network-isolation_preparing[Section 3.4. Preparing RHOCP for RHOSP network isolation] from _Deploying Red Hat OpenStack Platform 18.0 Development Preview 3 on Red Hat OpenShift Container Platform guide_. 
 
-FIME: Eleminate the configuration on the master nodes
-
 . Create required projects for the Openstack Operator installation.
 +
 The next installation step for the *OpenStack Operators* involves creating the *openstack-operators* and *openstack* projects for the RHOSO operators.
