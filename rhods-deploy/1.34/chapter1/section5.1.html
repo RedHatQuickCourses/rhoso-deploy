@@ -223,7 +223,7 @@
 <i class="fa icon-note" title="Note"></i>
 </td>
 <td class="content">
-You need to replace <strong>My-RH-username</strong> and <strong>My-Password</strong> strings in the above command with the apporpriate value.
+You need to replace <strong>My-RH-username</strong> and <strong>My-Password</strong> strings in the above command with the appropriate value.
 </td>
 </tr>
 </table>
@@ -249,7 +249,7 @@ You need to replace <strong>My-RH-username</strong> and <strong>My-Password</str
 </div>
 </li>
 <li>
-<p>Veify the secret is created:</p>
+<p>Veify that the secret is created:</p>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">oc get secrets -n openstack-operators osp-operators-secret</code></pre>
@@ -315,7 +315,7 @@ sed -i 's/&lt;base64_password_heat&gt;/cGFzc3dvcmQ=/g' osp-ng-ctlplane-secret.ya
 </div>
 </li>
 <li>
-<p>Verify the <strong>Secret</strong> was created:</p>
+<p>Verify that the <strong>Secret</strong> was created:</p>
 <div class="listingblock execute">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">oc describe secret osp-secret -n openstack</code></pre>
