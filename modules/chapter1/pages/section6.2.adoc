@@ -43,7 +43,6 @@ watch virsh domifaddr osp-compute0 --source agent
 ----
 +
 .Sample Output
-[source,bash]
 ----
 Every 2.0s: virsh domifaddr osp-compute0 --source agent                                                                                                 hypervisor: Wed Apr 17 07:03:13 2024
 
@@ -133,6 +132,7 @@ dnf install -y podman
 ----
 podman login registry.redhat.io
 ----
++
 .Sample output
 ----
 [root@edpm-compute-0 ~]# podman login registry.redhat.io

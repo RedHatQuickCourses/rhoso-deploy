@@ -111,9 +111,9 @@ vi osp-ng-dataplane-node-set-deploy.yaml
 ... Define `role_networks` used in jinja2 block.
 ... Set `edpm_sshd_allowed_ranges` to ctlplane subnet.
 ... Set `edpm_container_registry_logins` with your credentials. 
-
++
 NOTE: Make sure nmae of the nodesets in deployment config matches with metadata name in your dataplane nodeset configuration.
-
++
 IMPORTANT: Configuration of data plane node set file is tricky. Compare your configuration settings with the pre-configured file for reference.
 
 . Copy sample dataplane deployment configuration from the documentation link mentioned in the reference on top.
