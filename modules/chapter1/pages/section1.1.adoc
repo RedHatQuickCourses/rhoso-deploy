@@ -4,20 +4,20 @@
 
 === Traditional RHOSP deployment with TripleO
 
-Red Hat OpenStack deployment up to version 17.1 traditionally utilizes the TripleO project, short for "OpenStack On OpenStack." 
+Red Hat OpenStack deployment up to version 17.1 traditionally utilizes the TripleO project, also known as "OpenStack On OpenStack." 
 Below is an illustration outlining the fundamental architecture of RHOSP deployment employing TripleO.
 
 image::traditional-rhosp-ooo.png[]
 
-The deployment process comprises two primary components:
+The deployment process comprises of two primary components:
 
 **1. Undercloud:**
-   The Undercloud node, also referred to as the RHOSP Director, serves as a toolset for the installation and management of a complete RHOSP environment. It facilitates the setup of a fully-operational, efficient, and resilient RHOSP environment capable of provisioning and managing bare metal systems to function as RHOSP nodes. The initial step involves installing the Undercloud, followed by its utilization as a tool to install and configure the Overcloud, also known as the Deployed Cloud.
+   The Undercloud node, also referred to as the RHOSP Director, serves as a toolset for the installation and management of a complete RHOSP environment. It facilitates the setup of a fully-operational, efficient, and resilient RHOSP environment, capable of provisioning and managing bare metal systems to function as RHOSP nodes. The initial step involves installing the Undercloud, followed by its utilization as a tool to install and configure the Overcloud, also known as the Deployed Cloud.
 
 **2. Overcloud:**
-   The resulting RHOSP environment created by the Undercloud is known as the Overcloud. It encompasses multiple nodes with distinct roles, defined based on the desired RHOSP environment. The default set of Overcloud node roles includes:
+   The resulting RHOSP environment created by the Undercloud is known as the Overcloud. It encompasses multiple nodes with distinct roles, which are defined based on the desired RHOSP environment. The default set of Overcloud node roles includes:
 
-   - **Controller:** These nodes offer administration, networking, and high availability functionalities for the RHOSP environment. A recommended RHOSP environment comprises three Controller nodes clustered for high availability.
+   - **Controller:** These nodes offer administration, networking, and high availability functionalities for the RHOSP environment. A recommended RHOSP environment comprises of three Controller nodes clustered for high availability.
    - **Compute:** These nodes provide computational resources for the RHOSP environment, allowing for scalability through the addition of more Compute nodes over time.
    - **Storage:** These nodes cater to storage requirements within the RHOSP environment.
 
@@ -25,7 +25,7 @@ The deployment process comprises two primary components:
 
 Deployment of Red Hat OpenStack 18.0 introduces the concept of OpenStack services on OpenShift (RHOSO).
 This deployment method utilizes Red Hat OpenShift cluster for the deployment and management of Red Hat OpenStack.
-RHOSP Director and Control nodes are completely eleminated from this deployment. 
+RHOSP Director and Control nodes are completely eliminated from this deployment. 
 RHOCP takes care of hosting the services required for Control node and it also manages the deployment of the compute nodes.
  
 image::new-rhoso-arch.png[]

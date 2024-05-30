@@ -2,13 +2,13 @@
 
 *Reference:* Step #7 on https://access.redhat.com/documentation/en-us/red_hat_openstack_platform/18.0-dev-preview/html-single/deploying_red_hat_openstack_platform_18.0_development_preview_3_on_red_hat_openshift_container_platform/index#proc_preparing-RHOCP-for-RHOSP-network-isolation_preparing[the same link on the previous page] for Section 3.4. Preparing RHOCP for RHOSP network isolation.
 
-. Copy sample configuration for the network-attachment-defination configuration from the same documentation url (step #8)
+. Copy sample configuration for the network-attachment-definition configuration from the same documentation url (step #8)
 +
 *or*
 +
 use the provided sample configuration file `single-nic-vlan-netattach.sample`.
 
-. Create a copy of sample config to configure network attachment defination for your deployment.
+. Create a copy of sample config to configure network attachment definition for your deployment.
 +
 [source,bash]
 ----
@@ -22,7 +22,7 @@ cp single-nic-vlan-netattach.sample osp-ng-netattach.yaml
 vi osp-ng-netattach.yaml
 ----
 
-. Change the interface name and ipaddress as per your setup. Refer to network cofiguration table.
+. Change the interface name and ip address as per your setup. Refer to network cofiguration table.
 . Copy the ctlplane block and paste it at the bottom and change it for external network configuration with the relevant interface and ip addresses.
 
 . Configure a *nad* resource for each isolated network to attach a service pod to the network:

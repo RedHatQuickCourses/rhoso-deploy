@@ -38,11 +38,11 @@ NOTE: The catalog may take approximately 2 hours to get provisioned.
 
 == Objectives
 
-* Traditional TripleO deployment verses deployment with OpenShift cluster.
-* RHOSO deployment process overview.
-* Pre-requisites for RHOSO deployment.
+* Study traditional TripleO deployment verses deployment with OpenShift cluster.
+* Learn the RHOSO deployment process overview.
+* Identify the pre-requisites for RHOSO deployment.
 * Deploy control plane services on the RHOCP cluster.
-* Verify functionality of control plane services.
+* Verify the functionality of control plane services.
 * Deploy data plane node using RHOCP cluster.
 * Verify functionality of data plane deployment.
-* Verify RHOSP cluster function by deploying workload on it.
+* Discover RHOSP cluster function by deploying workload on it.

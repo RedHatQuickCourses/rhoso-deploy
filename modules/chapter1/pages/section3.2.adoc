@@ -72,7 +72,7 @@ cp osp-ng-nncp-worker1.yaml osp-ng-nncp-worker3.yaml
 . Edit the other files with relevant network configuration as per network configuration table.
 . Most likely you will need to change only the metadata name, the ip addresses and nodeselector hostname configuration.
 
-. Apply newly onfigured yamls indivdually:
+. Apply newly configured yamls indivdually:
 +
 [source,bash,role=execute]
 ----
@@ -95,7 +95,7 @@ osp-enp1s0-worker-ocp4-worker1    Available   SuccessfullyConfigured
 osp-enp1s0-worker-ocp4-worker2    Available   SuccessfullyConfigured
 osp-enp1s0-worker-ocp4-worker3    Available   SuccessfullyConfigured
 ----
-. Verify the network settings are applied on the relevant node by listing ip settings on the node.
+. Verify that the network settings are applied on the relevant node by listing ip settings on the node.
 
 .. Connect to node:
 +

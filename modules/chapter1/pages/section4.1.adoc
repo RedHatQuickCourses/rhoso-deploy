@@ -25,7 +25,7 @@ chmod 777 /nfs/pv*
 
 
 . Configure NFS storage class
-.. Use below sample configuration to create nfs sorage class:
+.. Use below sample configuration to create nfs storage class:
 +
 [source,bash,role=execute]
 ----
@@ -59,7 +59,7 @@ spec:
   volumeMode: Filesystem
 ----
 .. Create copies of the above block for PersistentVolume.
-.. Use the simila block for creating different physicle volumes.
+.. Use the similar block for creating different physical volumes.
 .. Change the name and the path accordingly.
 .. You may add your configuration for creation of nfs StorageClass and PersistentVolumes in one file.
 +
