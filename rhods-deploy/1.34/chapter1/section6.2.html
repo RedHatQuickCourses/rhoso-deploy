@@ -262,7 +262,7 @@ RHEL9.3 qcow2 image is made available for your convenience. Ideally you will be 
 <div class="listingblock">
 <div class="title">Sample Output</div>
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">Every 2.0s: virsh domifaddr osp-compute0 --source agent                                                                                                 hypervisor: Wed Apr 17 07:03:13 2024
+<pre>Every 2.0s: virsh domifaddr osp-compute0 --source agent                                                                                                 hypervisor: Wed Apr 17 07:03:13 2024
 
  Name       MAC address          Protocol     Address
 -------------------------------------------------------------------------------
@@ -271,7 +271,7 @@ RHEL9.3 qcow2 image is made available for your convenience. Ideally you will be 
  eth0       52:54:00:c0:0a:26    ipv4         172.22.0.202/24
  -          -                    ipv6         fe80::16:d083:92f4:f201/64
  eth1       52:54:00:e5:ce:09    ipv4         192.168.123.61/24
- -          -                    ipv6         fe80::bfc0:e5db:a655:729f/64</code></pre>
+ -          -                    ipv6         fe80::bfc0:e5db:a655:729f/64</pre>
 </div>
 </div>
 <div class="paragraph">
@@ -360,10 +360,8 @@ subscription-manager repos --enable=rhceph-6-tools-for-rhel-9-x86_64-rpms --enab
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">podman login registry.redhat.io</code></pre>
 </div>
 </div>
-</li>
-</ol>
-</div>
 <div class="listingblock">
+<div class="title">Sample output</div>
 <div class="content">
 <pre>[root@edpm-compute-0 ~]# podman login registry.redhat.io
 Username: rhn-support-ashishks
@@ -371,8 +369,7 @@ Password:
 Login Succeeded!</pre>
 </div>
 </div>
-<div class="olist arabic">
-<ol class="arabic">
+</li>
 <li>
 <p>Log off from the Compute Server.</p>
 <div class="listingblock execute">
