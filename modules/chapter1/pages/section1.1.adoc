@@ -1,4 +1,4 @@
-= Traditional TripleO deployment verses deployment with OpenShift cluster.
+= Traditional TripleO deployment versus deployment with OpenShift cluster.
 
 == Introduction
 
@@ -26,6 +26,6 @@ The deployment process comprises of two primary components:
 Deployment of Red Hat OpenStack 18.0 introduces the concept of OpenStack services on OpenShift (RHOSO).
 This deployment method utilizes Red Hat OpenShift cluster for the deployment and management of Red Hat OpenStack.
 RHOSP Director and Control nodes are completely eliminated from this deployment. 
-RHOCP takes care of hosting the services required for Control node and it also manages the deployment of the compute nodes.
+RHOCP takes care of hosting the services required for Control node and it also manages the deployment of the compute nodes via Ansible.
  
 image::new-rhoso-arch.png[]

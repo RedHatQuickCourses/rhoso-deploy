@@ -1,0 +1,44 @@
+= Configure the secrets (1 of 2)
+
+Follow below steps for configuring the secret to authenticate with the Red Hat registry (registry.redhat.io)
+
+. Prepare the secret for installating the operators:
++
+Login with your Red Hat account and create a secret:
++
+[source,bash]
+----
+podman login --username "My-RH-username" --password "My-Password" registry.redhat.io --authfile auth.json
+----
++
+NOTE: You need to replace *My-RH-username* and *My-Password* strings in the above command with the appropriate value.
+
+. Ensure that you observe the `Login Succeeded!` message in the output of the preceding command, then confirm the creation of the `auth.json` file.
++
+[source,bash]
+----
+cat auth.json
+----
+
+. Create secret for the registry:
++
+[source,bash]
+----
+oc create secret generic osp-operators-secret \
+ -n openstack-operators \
+ --from-file=.dockerconfigjson=auth.json \
+ --type=kubernetes.io/dockerconfigjson
+----
+
+. Veify that the secret is created:
++
+[source,bash]
+----
+oc get secrets -n openstack-operators osp-operators-secret
+----
++
+.Sample Output
+----
+NAME                   TYPE                             DATA   AGE
+osp-operators-secret   kubernetes.io/dockerconfigjson   1      10s
+----
