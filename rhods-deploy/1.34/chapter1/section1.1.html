@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>Traditional TripleO deployment verses deployment with OpenShift cluster. :: RHOSP18 - Provision Control Plane Services and Manage Data Plane Nodes</title>
+    <title>Traditional TripleO deployment versus deployment with OpenShift cluster. :: RHOSP18 - Provision Control Plane Services and Manage Data Plane Nodes</title>
     <link rel="prev" href="section1.html">
     <link rel="next" href="section1.2.html">
     <meta name="generator" content="Antora 3.1.3">
@@ -50,7 +50,7 @@
     <a class="nav-link" href="section1.html">Introduction</a>
 <ul class="nav-list">
   <li class="nav-item is-current-page" data-depth="2">
-    <a class="nav-link" href="section1.1.html">Traditional TripleO deployment verses deployment with OpenShift cluster.</a>
+    <a class="nav-link" href="section1.1.html">Traditional TripleO deployment versus deployment with OpenShift cluster.</a>
   </li>
   <li class="nav-item" data-depth="2">
     <a class="nav-link" href="section1.2.html">RHOSO installation process overview</a>
@@ -116,7 +116,10 @@
     <a class="nav-link" href="section5.html">Install control plane</a>
 <ul class="nav-list">
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="section5.1.html">Configure the secrets</a>
+    <a class="nav-link" href="section5.1-1.html">Configure the secrets (1 of 2)</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="section5.1-2.html">Configure the secrets (2 of 2)</a>
   </li>
   <li class="nav-item" data-depth="2">
     <a class="nav-link" href="section5.2.html">Install the OpenStack Operator</a>
@@ -191,7 +194,7 @@
   <ul>
     <li><a href="../index.html">RHOSP18 - Provision Control Plane Services and Manage Data Plane Nodes</a></li>
     <li><a href="section1.html">Introduction</a></li>
-    <li><a href="section1.1.html">Traditional TripleO deployment verses deployment with OpenShift cluster.</a></li>
+    <li><a href="section1.1.html">Traditional TripleO deployment versus deployment with OpenShift cluster.</a></li>
   </ul>
 </nav>
 </div>
@@ -200,7 +203,7 @@
   <div class="toc-menu"></div>
 </aside>
 <article class="doc">
-<h1 class="page">Traditional TripleO deployment verses deployment with OpenShift cluster.</h1>
+<h1 class="page">Traditional TripleO deployment versus deployment with OpenShift cluster.</h1>
 <div class="sect1">
 <h2 id="_introduction"><a class="anchor" href="#_introduction"></a>Introduction</h2>
 <div class="sectionbody">
@@ -246,7 +249,7 @@ Below is an illustration outlining the fundamental architecture of RHOSP deploym
 <p>Deployment of Red Hat OpenStack 18.0 introduces the concept of OpenStack services on OpenShift (RHOSO).
 This deployment method utilizes Red Hat OpenShift cluster for the deployment and management of Red Hat OpenStack.
 RHOSP Director and Control nodes are completely eliminated from this deployment.
-RHOCP takes care of hosting the services required for Control node and it also manages the deployment of the compute nodes.</p>
+RHOCP takes care of hosting the services required for Control node and it also manages the deployment of the compute nodes via Ansible.</p>
 </div>
 <div class="imageblock">
 <div class="content">

@@ -50,7 +50,7 @@
     <a class="nav-link" href="section1.html">Introduction</a>
 <ul class="nav-list">
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="section1.1.html">Traditional TripleO deployment verses deployment with OpenShift cluster.</a>
+    <a class="nav-link" href="section1.1.html">Traditional TripleO deployment versus deployment with OpenShift cluster.</a>
   </li>
   <li class="nav-item" data-depth="2">
     <a class="nav-link" href="section1.2.html">RHOSO installation process overview</a>
@@ -116,7 +116,10 @@
     <a class="nav-link" href="section5.html">Install control plane</a>
 <ul class="nav-list">
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="section5.1.html">Configure the secrets</a>
+    <a class="nav-link" href="section5.1-1.html">Configure the secrets (1 of 2)</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="section5.1-2.html">Configure the secrets (2 of 2)</a>
   </li>
   <li class="nav-item" data-depth="2">
     <a class="nav-link" href="section5.2.html">Install the OpenStack Operator</a>
@@ -211,12 +214,11 @@ This policy can be used to set network interfaces, routing tables, firewall rule
 <div class="paragraph">
 <p><strong>Multus CNI plugin</strong> <em>facilitates the network configuration for the pods running control plane services for the cluster.</em>
 <code>NetworkAttachmentDefinition</code> (NAD) is a feature offered by the Multus CNI (Container Network Interface) plugin.
-NAD is used to define network attachment points and states for network devices, allowing for automatic fencing and management of those devices.</p>
+NAD is used to provide existing layer-2 networking to pods.</p>
 </div>
 <div class="paragraph">
-<p><strong>MetalLB operator</strong> <em>offers load blaancing service for OCP baremetal cluster.</em>
-<code>IPAddressPool</code> and <code>L2Advertisement</code> CRs offered by MetalLB operator facilitates IP advertisement from specified pools, ensuring efficient IP allocation to services and namespaces.
-By leveraging these custom resources, OpenShift facilitates efficient communication between nodes within the cluster, promoting seamless integration and performance optimization in networking-intensive environments.</p>
+<p><strong>MetalLB operator</strong> <em>offers load balancing service for OSP control plane services.</em>
+<code>IPAddressPool</code> and <code>L2Advertisement</code> CRs offered by MetalLB operator facilitates IP advertisement from specified pools, ensuring efficient IP allocation to services and namespaces.</p>
 </div>
 <nav class="pagination">
   <span class="prev"><a href="section2.5.html">Install Cert-Manager Operator</a></span>

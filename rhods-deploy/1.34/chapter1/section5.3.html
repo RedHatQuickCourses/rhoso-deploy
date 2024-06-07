@@ -50,7 +50,7 @@
     <a class="nav-link" href="section1.html">Introduction</a>
 <ul class="nav-list">
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="section1.1.html">Traditional TripleO deployment verses deployment with OpenShift cluster.</a>
+    <a class="nav-link" href="section1.1.html">Traditional TripleO deployment versus deployment with OpenShift cluster.</a>
   </li>
   <li class="nav-item" data-depth="2">
     <a class="nav-link" href="section1.2.html">RHOSO installation process overview</a>
@@ -116,7 +116,10 @@
     <a class="nav-link" href="section5.html">Install control plane</a>
 <ul class="nav-list">
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="section5.1.html">Configure the secrets</a>
+    <a class="nav-link" href="section5.1-1.html">Configure the secrets (1 of 2)</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="section5.1-2.html">Configure the secrets (2 of 2)</a>
   </li>
   <li class="nav-item" data-depth="2">
     <a class="nav-link" href="section5.2.html">Install the OpenStack Operator</a>
@@ -252,10 +255,26 @@ In this deployment, the bastion has a preconfigured NFS service that we will be 
 <p>Change <code>storageClass</code> from <code>local-storage</code> to <code>ocs-storagecluster-ceph-rbd</code></p>
 </li>
 <li>
-<p>Change the <code>metallb.universe.tf/loadBalancerIPs</code> to <code>172.22.0.89</code> (this sets external ip for dnsmasq service)</p>
+<p>Setup dns by configuring dmsmasq service</p>
+<div class="olist lowerroman">
+<ol class="lowerroman" type="i">
+<li>
+<p>Under <code>dns:</code> section&#8217;s <code>template:</code> block, change the <code>metallb.universe.tf/loadBalancerIPs</code> to <code>172.22.0.89</code></p>
 </li>
 <li>
-<p>Set the server ip from 192.168.122.1 to 192.168.123.100 (this reflects in /etc/dnsmasq.d/config.cfg file of dnsmasq-dns pod)</p>
+<p>Above configuration sets the dnsmasq service to listen on IP <code>172.22.0.89</code>.</p>
+</li>
+<li>
+<p>Set the server ip from 192.168.122.1 to 192.168.123.100</p>
+</li>
+<li>
+<p>IP <code>192.168.123.100</code> belongs to an external DNS server that dnsmasq service will use to forward the queries.</p>
+</li>
+<li>
+<p>This configuration reflects in /etc/dnsmasq.d/config.cfg file of dnsmasq-dns pod.</p>
+</li>
+</ol>
+</div>
 </li>
 <li>
 <p>Configure nfs cinder volume: Refer step #2 in <a href="https://access.redhat.com/documentation/en-us/red_hat_openstack_platform/18.0-dev-preview/html-single/deploying_red_hat_openstack_platform_18.0_development_preview_3_on_red_hat_openshift_container_platform/index#proc_alternative-cinder-configure-control-plane-for-nfs_ceph-back-end">9.1.2. Configuring the control plane to use the generic NFS driver</a></p>
