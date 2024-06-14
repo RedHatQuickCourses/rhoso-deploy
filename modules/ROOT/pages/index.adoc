@@ -26,7 +26,21 @@ The PTL team acknowledges the valuable contributions of the following Red Hat as
 
 Continue using the https://demo.redhat.com/catalog?item=babylon-catalog-prod/equinix-metal.osp-on-ocp.prod&utm_source=webapp&utm_medium=share-link[Red Hat OpenStack Services on OpenShift Dev Preview Demo] lab for hands-on activity for this course.
 
+* Click on `Order` button for `Red Hat OpenStack Services on OpenShift Dev Preview` catalog.
+* Under `Activity` option select `Practice / Enablement`
+* In the `Purpose` drop down box, select `Learning about the product`
+* Leave all other options at default and click on `Order` button at bottom of the page.
+
 NOTE: The catalog may take approximately 2 hours to get provisioned.
+
+* On Demo Platform home page, click on `Services` option on left pane.
+* Make sure the `Status` for your lab is displayed as `Running`
+* Under the `Name` column, click on the link for your lab to see the lab access information.
+* You should get important details about the lab access on your lab environment page, on `Info` tab.
+* Login to the public IP of Host for your lab as `lab-user` with SSH password mentioned on Info page.
+* On the hypervisor host, swtich from lab-user to root using `sudo -i` command.
+* From `root@hypervisor` session run `ssh root@192.168.123.100` for login to bastion host using ssh key.
+* Use `bastion` VM to proceed with the hands-on activity for the lab.
 
 == Prerequisites
 
